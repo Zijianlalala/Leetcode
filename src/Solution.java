@@ -1,4 +1,15 @@
+import com.sun.xml.internal.ws.message.stream.StreamHeader;
+
 public class Solution {
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        ListNode head = ListNode.initList(new int[]{-1, 5, 3, 4, 0});
+        ListNode.print(head);
+        head = solution.sortList(head, null);
+        ListNode.print(head);
+    }
+
     /**
      * 283. 移动零
      *
@@ -18,6 +29,7 @@ public class Solution {
 
     /**
      * 147.对链表进行插入排序
+     *
      * @param head
      * @return
      */
@@ -62,4 +74,90 @@ public class Solution {
         }
         return head;
     }
+
+    /**
+     * 148. 链表排序
+     *
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        // create a null head
+        ListNode nullHead = new ListNode(0, head);
+        ListNode sorted = new ListNode(0, null);
+        ListNode cur, pre;
+        while (nullHead.next != null) {
+            pre = nullHead;
+            cur = pre.next;
+            int maxVal = cur.val;
+            ListNode max = cur, preMax = pre;
+            while (cur != null) {
+                if (cur.val > maxVal) {
+                    maxVal = cur.val;
+                    max = cur;
+                    preMax = pre;
+                }
+                pre = cur;
+                cur = cur.next;
+            }
+            // remove node from old list
+            preMax.next = max.next;
+            System.out.println("maxVal" + max.val);
+            // print head
+            ListNode.print(head);
+            // add node to new list
+            max.next = sorted.next;
+            sorted.next = max;
+
+        }
+        return sorted.next;
+    }
+
+
+    private ListNode sortList(ListNode head, ListNode tail) {
+        if (head == null) return head;
+        if (head.next == tail) {
+            head.next = null;
+            return head;
+        }
+        ListNode slow = head, fast = head;
+        while (fast != tail) {
+            slow = slow.next;
+            fast = fast.next;
+            if (fast != tail) {
+                fast = fast.next;
+            }
+        }
+        ListNode mid = slow;
+        ListNode list1 = sortList(head, mid);
+        ListNode list2 = sortList(mid, tail);
+        ListNode sorted = merge(list1, list2);
+        return sorted;
+    }
+
+    private ListNode merge(ListNode head1, ListNode head2) {
+        ListNode dummyHead = new ListNode(0);
+        ListNode temp = dummyHead, temp1 = head1, temp2 = head2;
+
+        while (temp1 != null && temp2 != null) {
+            if (temp1.val < temp2.val) {
+                temp.next = temp1;
+                temp1 = temp1.next;
+            } else {
+                temp.next = temp2;
+                temp2 = temp2.next;
+            }
+            temp = temp.next;
+        }
+        if (temp1 != null) {
+            temp.next = temp1;
+        } else {
+            temp.next = temp2;
+        }
+        return dummyHead.next;
+    }
+
 }
