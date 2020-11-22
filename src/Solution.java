@@ -1,7 +1,9 @@
 import com.sun.xml.internal.ws.message.stream.StreamHeader;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Solution {
 
@@ -188,29 +190,19 @@ public class Solution {
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
-        if (s.length() == 0 || s.length() == 1)
-            return s.length();
-        StringBuilder maxstring = new StringBuilder("");
-        int maxLength = 0;
-        for (int i = 0; i < s.length(); i++) {
-            String t = s.substring(i, i + 1);
-            if (maxstring.indexOf(t) == -1) {
-                maxstring.append(t);
-            } else {
-                // 遇到重复的子串
-                if (maxLength < maxstring.length()) {
-                    maxLength = maxstring.length();
-                }
-                int lo = maxstring.indexOf(t)+1;
-                maxstring = new StringBuilder(maxstring.substring(lo));
-//                if (maxstring.length() == 0)
-                    maxstring.append(t);
+        Set<Character> set = new HashSet<>();
+        int N = s.length();
+        int i = 0, rk = -1, ans = 0;
+        for (; i < N; i++) {
+            if (i != 0) {
+                set.remove(s.charAt(i - 1));
             }
-            System.out.println(maxstring.toString());
-         }
-        if (maxLength < maxstring.length()) {
-            maxLength = maxstring.length();
+            while (rk + 1 < N && !set.contains(s.charAt(rk + 1))) {
+                set.add(s.charAt(rk + 1));
+                rk++;
+            }
+            ans = Math.max(ans, rk - i + 1);
         }
-        return maxLength;
+        return ans;
     }
 }
