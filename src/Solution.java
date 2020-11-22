@@ -7,8 +7,9 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.isAnagram("anagram", "nagaram"));
-    }
+        int[] a = new int[2];
+        System.out.println(a[0]);
+     }
 
     /**
      * 283. 移动零
@@ -171,11 +172,6 @@ public class Solution {
         if (s == null || t == null) return false;
         if (s.length() != t.length()) return false;
         int[] map = new int[26];
-        // 初始化
-        for (int i: map
-             ) {
-            i = 0;
-        }
          for (int i = 0; i < s.length(); i++) {
              map[s.charAt(i)-97]++;
         }
