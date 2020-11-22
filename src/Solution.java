@@ -1,13 +1,13 @@
 import com.sun.xml.internal.ws.message.stream.StreamHeader;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        ListNode head = ListNode.initList(new int[]{-1, 5, 3, 4, 0});
-        ListNode.print(head);
-        head = solution.sortList(head, null);
-        ListNode.print(head);
+        System.out.println(solution.isAnagram("anagram", "nagaram"));
     }
 
     /**
@@ -158,6 +158,31 @@ public class Solution {
             temp.next = temp2;
         }
         return dummyHead.next;
+    }
+
+    /**
+     * 242.有效的字母异位词
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isAnagram(String s, String t) {
+        if (s == null || t == null) return false;
+        if (s.length() != t.length()) return false;
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
+        for (int i = 0; i < t.length(); i++) {
+            char ch = s.charAt(i);
+            map.put(ch, map.getOrDefault(ch, 0) - 1);
+            if (map.get(ch) < 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
