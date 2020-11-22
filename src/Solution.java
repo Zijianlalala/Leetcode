@@ -7,9 +7,8 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] a = new int[2];
-        System.out.println(a[0]);
-     }
+        System.out.println(solution.lengthOfLongestSubstring("abcabcbb"));
+    }
 
     /**
      * 283. 移动零
@@ -172,14 +171,46 @@ public class Solution {
         if (s == null || t == null) return false;
         if (s.length() != t.length()) return false;
         int[] map = new int[26];
-         for (int i = 0; i < s.length(); i++) {
-             map[s.charAt(i)-97]++;
+        for (int i = 0; i < s.length(); i++) {
+            map[s.charAt(i) - 97]++;
         }
         for (int i = 0; i < t.length(); i++) {
-             if (--map[t.charAt(i)-97] < 0)
-                 return false;
+            if (--map[t.charAt(i) - 97] < 0)
+                return false;
         }
         return true;
     }
 
+    /**
+     * 无重复最长子串
+     *
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0 || s.length() == 1)
+            return s.length();
+        StringBuilder maxstring = new StringBuilder("");
+        int maxLength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            String t = s.substring(i, i + 1);
+            if (maxstring.indexOf(t) == -1) {
+                maxstring.append(t);
+            } else {
+                // 遇到重复的子串
+                if (maxLength < maxstring.length()) {
+                    maxLength = maxstring.length();
+                }
+                int lo = maxstring.indexOf(t)+1;
+                maxstring = new StringBuilder(maxstring.substring(lo));
+//                if (maxstring.length() == 0)
+                    maxstring.append(t);
+            }
+            System.out.println(maxstring.toString());
+         }
+        if (maxLength < maxstring.length()) {
+            maxLength = maxstring.length();
+        }
+        return maxLength;
+    }
 }
