@@ -1,15 +1,12 @@
 import com.sun.xml.internal.ws.message.stream.StreamHeader;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.lengthOfLongestSubstring("abcabcbb"));
+        System.out.println(solution.findMedianSortedArrays(new int[]{1, 3, 5, 7}, new int[]{2}));
     }
 
     /**
@@ -204,5 +201,54 @@ public class Solution {
             ans = Math.max(ans, rk - i + 1);
         }
         return ans;
+    }
+
+    /**
+     * 4. 寻找两个正序数组的中位数
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        return 0;
+    }
+
+    /**
+     * 归并两个有序数组
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] merge(int[] nums1, int[] nums2) {
+        int n = nums1.length;
+        int m = nums2.length;
+        int[] aux = new int[m + n];
+        int i = 0, j = 0, k = 0;
+        while (i < n && j < m) {
+            if (nums1[i] < nums2[j]) {
+                aux[k++] = nums1[i++];
+            } else {
+                aux[k++] = nums2[j++];
+            }
+        }
+        while (i < n) {
+            aux[k++] = nums1[i++];
+        }
+        while (j < m) {
+            aux[k++] = nums2[j++];
+        }
+        return aux;
+    }
+
+    /**
+     * 222. 完全二叉树的节点个数
+     * @param root
+     * @return
+     */
+    public int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        return countNodes(root.left) + countNodes(root.right) + 1;
     }
 }
