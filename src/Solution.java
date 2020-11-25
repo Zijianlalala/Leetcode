@@ -6,7 +6,8 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.findMedianSortedArrays(new int[]{1, 3, 5, 7}, new int[]{2}));
+        String s = "rat";
+        System.out.println(solution.sortString(s));
     }
 
     /**
@@ -244,6 +245,7 @@ public class Solution {
 
     /**
      * 222. 完全二叉树的节点个数
+     *
      * @param root
      * @return
      */
@@ -251,4 +253,41 @@ public class Solution {
         if (root == null) return 0;
         return countNodes(root.left) + countNodes(root.right) + 1;
     }
+
+    /**
+     * 1370.上升下降字符串
+     *
+     * @param s
+     * @return
+     */
+    public String sortString(String s) {
+        int[] nums = new int[26];
+        for (int i = 0; i < s.length(); i++) {
+            nums[s.charAt(i) - 'a']++;
+        }
+        StringBuilder result = new StringBuilder();
+        while (result.length() < s.length()) {
+            for (int i = 0; i < 26; i++) {
+                if (nums[i] > 0) {
+                    nums[i]--;
+                    System.out.println('a' + i);
+                    result.append((char) ('a' + i));
+                }
+            }
+            for (int i = 25; i >= 0; i--) {
+                if (nums[i] > 0) {
+                    nums[i]--;
+                    result.append((char) ('a' + i));
+                }
+            }
+        }
+        return result.toString();
+    }
+
+    private void swap(char[] a, int i, int j) {
+        char t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
+
 }
