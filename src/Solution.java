@@ -6,8 +6,7 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        String s = "rat";
-        System.out.println(solution.sortString(s));
+        System.out.println(solution.maximumGap(new int[]{3, 6, 9, 1}));
     }
 
     /**
@@ -288,6 +287,25 @@ public class Solution {
         char t = a[i];
         a[i] = a[j];
         a[j] = t;
+    }
+
+    /**
+     * 164.最大间距
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumGap(int[] nums) {
+        if (nums.length < 2) return 0;
+        // 排序
+        Arrays.sort(nums);
+        int maxGap = 0;
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i + 1] - nums[i] > maxGap) {
+                maxGap = nums[i + 1] - nums[i];
+            }
+        }
+        return maxGap;
     }
 
 }
