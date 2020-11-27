@@ -308,4 +308,31 @@ public class Solution {
         return maxGap;
     }
 
+    /**
+     * 454.四数相加II
+     * @param A
+     * @param B
+     * @param C
+     * @param D
+     * @return
+     */
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+
+        Map<Integer, Integer> countAB = new HashMap<Integer, Integer>();
+        for (int u : A) {
+            for (int v : B) {
+                countAB.put(u + v, countAB.getOrDefault(u + v, 0) + 1);
+            }
+        }
+        int ans = 0;
+        for (int u : C) {
+            for (int v : D) {
+                if (countAB.containsKey(-u - v)) {
+                    ans += countAB.get(-u - v);
+                }
+            }
+        }
+        return ans; 
+    }
+
 }
