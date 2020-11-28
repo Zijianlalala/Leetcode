@@ -6,8 +6,9 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.maximumGap(new int[]{3, 6, 9, 1}));
-    }
+        System.out.println(
+                solution.containsNearbyAlmostDuplicate(new int[]{-2147483648,2147483647}, 1, 1));
+     }
 
     /**
      * 283. 移动零
@@ -310,6 +311,7 @@ public class Solution {
 
     /**
      * 454.四数相加II
+     *
      * @param A
      * @param B
      * @param C
@@ -317,7 +319,6 @@ public class Solution {
      * @return
      */
     public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
-
         Map<Integer, Integer> countAB = new HashMap<Integer, Integer>();
         for (int u : A) {
             for (int v : B) {
@@ -332,7 +333,28 @@ public class Solution {
                 }
             }
         }
-        return ans; 
+        return ans;
     }
 
+    /**
+     * 220.存在重复元素III
+     *
+     * @param nums
+     * @param k
+     * @param t
+     * @return
+     */
+    public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
+        int g = 1;
+        while (g <= k) {
+            for (int i = 0; i + g < nums.length; i++) {
+                if (Math.abs((long)nums[i] - (long)nums[i + g]) <= t) {
+
+                    return true;
+                }
+            }
+            g++;
+        }
+        return false;
+    }
 }
