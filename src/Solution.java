@@ -7,8 +7,8 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         System.out.println(
-                solution.containsNearbyAlmostDuplicate(new int[]{-2147483648,2147483647}, 1, 1));
-     }
+                solution.containsNearbyAlmostDuplicate(new int[]{-2147483648, 2147483647}, 1, 1));
+    }
 
     /**
      * 283. 移动零
@@ -297,16 +297,41 @@ public class Solution {
      * @return
      */
     public int maximumGap(int[] nums) {
-        if (nums.length < 2) return 0;
-        // 排序
-        Arrays.sort(nums);
-        int maxGap = 0;
-        for (int i = 0; i < nums.length - 1; i++) {
-            if (nums[i + 1] - nums[i] > maxGap) {
-                maxGap = nums[i + 1] - nums[i];
+        int n = nums.length;
+        if (n.length < 2) return 0;
+        int minVal = Arrays.stream(nums).min().getAsInt();
+        int maxVal = Arrays.stream(nums).max().getAsInt();
+        // 单个桶的区间
+        int d = Math.max(1, (maxVal - minVal) / (n - 1));
+        // 桶的数量
+        int bucketSize = (maxVal - minVal) / d + 1; 
+        // 用二维数组维护桶的，一个桶维护两个值（max, min）
+        int[][] bucket = new int[bucketSize][2];
+        // 初始化，min=-1/max=-1
+        for (int i = 0; i < bucketSize; i++) {
+            Arrays.fill(bucket[i], -1);
+        }
+        for (int i = 0; i < n; i++) {
+            // 映射函数
+            int idx = (nums[i] - minVal) / d;
+            if (bucket[idx][0] == -1) {
+                bucket[idx][0] = bucket[idx][1] = nums[i];
+            } else {
+                bucket[idx][0] = Math.min(nums[i], bucket[idx][0]);
+                bucket[idx][1] = Math.max(nums[i], bucket[idx][1]);
             }
         }
-        return maxGap;
+        int ret = 0;
+        int prev = -1;
+        for (int i = 0; i < bucketSize; i++) {
+            if (bucket[i][0] == -1)// 说明该桶没有元素
+                continue;
+            if (prev != -1) {
+                ret = Math.max(ret, bucket[i][0] - bucket[prev][1]);
+            }
+            pre = i;
+        }
+        return ret;
     }
 
     /**
@@ -345,16 +370,34 @@ public class Solution {
      * @return
      */
     public boolean containsNearbyAlmostDuplicate(int[] nums, int k, int t) {
-        int g = 1;
-        while (g <= k) {
-            for (int i = 0; i + g < nums.length; i++) {
-                if (Math.abs((long)nums[i] - (long)nums[i + g]) <= t) {
-
-                    return true;
-                }
-            }
-            g++;
+        if (t < 0) return false;
+        Map<Long, Long> d = new HashMap<>();
+        // 设置桶的长度范围
+        long w = (long) t + 1;
+        for (int i = 0; i < nums.length; i++) {
+            // 计算每个元素所属哪一个桶
+            long m = getID(nums[i], w);
+            if (d.containsKey(m))
+                return true;
+            if (d.containsKey(m - 1) && Math.abs(nums[i] - d.get(m - 1)) < w)
+                return true;
+            if (d.containsKey(m + 1) && Math.abs(nums[i] - d.get(m + 1)) < w)
+                return true;
+            d.put(m, (long) nums[i]);
+            // 维护一个滑动窗口
+            if (i >= k) d.remove(getID(nums[i - k], w));
         }
         return false;
+    }
+
+    /**
+     * 映射函数
+     *
+     * @param x
+     * @param w
+     * @return
+     */
+    private long getID(long x, long w) {
+        return x < 0 ? (x + 1) / w - 1 : x / w;
     }
 }
