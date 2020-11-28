@@ -6,8 +6,10 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
+        int[] nums = new int[]{1, 3, 2, 3, 1};
         System.out.println(
-                solution.reversePairs(new int[]{2,4,3,5,1}));
+                solution.reversePairs(nums));
+        System.out.println(Arrays.toString(nums));
     }
 
     /**
@@ -409,14 +411,48 @@ public class Solution {
      * @return
      */
     public int reversePairs(int[] nums) {
-        int ret = 0;
-        for (int i = 0; i < nums.length; i++) {
-            for (int j = i + 1; j < nums.length; j++) {
-                if (nums[i] > 2 * nums[j]) {
-                    ret++;
-                }
+        return (int) sort(nums, 0, nums.length - 1);
+    }
+
+    private long sort(int[] nums, int lo, int hi) {
+        if (lo >= hi) return 0;
+        int mid = (hi - lo) / 2 + lo;
+        long inversions = 0;
+        inversions += sort(nums, lo, mid);
+        inversions += sort(nums, mid + 1, hi);
+        inversions += merge(nums, lo, mid, hi);
+        return inversions;
+    }
+
+    private long merge(int[] nums, int lo, int mid, int hi) {
+        long inversions = 0;
+        int i = lo;
+        int j = mid + 1;
+        int[] aux = new int[nums.length];
+        for (int k = 0; k < nums.length; k++) {
+            aux[k] = nums[k];
+        }
+        // 统计
+        while (i <= mid && j <= hi) {
+            if ((long)aux[i] > 2 * (long)aux[j]) {
+                inversions += mid - i + 1;
+                j++;
+            } else {
+                i++;
             }
         }
-        return ret;
+        // 重置指针
+        i = lo;
+        j = mid + 1;
+        // 合并
+        for (int k = lo; k <= hi; k++) {
+            if (i > mid) nums[k] = aux[j++];
+            else if (j > hi) nums[k] = aux[i++];
+            else if (aux[i] < aux[j])
+                nums[k] = aux[i++];
+            else
+                nums[k] = aux[j++];
+        }
+        return inversions;
     }
 }
