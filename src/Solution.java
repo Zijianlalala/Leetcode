@@ -7,7 +7,7 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         System.out.println(
-                solution.containsNearbyAlmostDuplicate(new int[]{-2147483648, 2147483647}, 1, 1));
+                solution.reversePairs(new int[]{2,4,3,5,1}));
     }
 
     /**
@@ -298,19 +298,20 @@ public class Solution {
      */
     public int maximumGap(int[] nums) {
         int n = nums.length;
-        if (n.length < 2) return 0;
+        if (n < 2) return 0;
         int minVal = Arrays.stream(nums).min().getAsInt();
         int maxVal = Arrays.stream(nums).max().getAsInt();
         // 单个桶的区间
         int d = Math.max(1, (maxVal - minVal) / (n - 1));
         // 桶的数量
-        int bucketSize = (maxVal - minVal) / d + 1; 
+        int bucketSize = (maxVal - minVal) / d + 1;
         // 用二维数组维护桶的，一个桶维护两个值（max, min）
         int[][] bucket = new int[bucketSize][2];
         // 初始化，min=-1/max=-1
         for (int i = 0; i < bucketSize; i++) {
             Arrays.fill(bucket[i], -1);
         }
+        // 排序，将各个元素放入不同的桶中（每个桶只维护两个元素，这个桶中的最大值和最小值）
         for (int i = 0; i < n; i++) {
             // 映射函数
             int idx = (nums[i] - minVal) / d;
@@ -329,7 +330,7 @@ public class Solution {
             if (prev != -1) {
                 ret = Math.max(ret, bucket[i][0] - bucket[prev][1]);
             }
-            pre = i;
+            prev = i;
         }
         return ret;
     }
@@ -399,5 +400,23 @@ public class Solution {
      */
     private long getID(long x, long w) {
         return x < 0 ? (x + 1) / w - 1 : x / w;
+    }
+
+    /**
+     * 493.翻转对
+     *
+     * @param nums
+     * @return
+     */
+    public int reversePairs(int[] nums) {
+        int ret = 0;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i + 1; j < nums.length; j++) {
+                if (nums[i] > 2 * nums[j]) {
+                    ret++;
+                }
+            }
+        }
+        return ret;
     }
 }
