@@ -411,30 +411,31 @@ public class Solution {
      * @return
      */
     public int reversePairs(int[] nums) {
-        return (int) sort(nums, 0, nums.length - 1);
+        if (nums.length < 2) return 0;
+        int[] aux = new int[nums.length];
+        return (int) sort(nums, aux, 0, nums.length - 1);
     }
 
-    private long sort(int[] nums, int lo, int hi) {
+    private long sort(int[] nums, int[] aux, int lo, int hi) {
         if (lo >= hi) return 0;
         int mid = (hi - lo) / 2 + lo;
         long inversions = 0;
-        inversions += sort(nums, lo, mid);
-        inversions += sort(nums, mid + 1, hi);
-        inversions += merge(nums, lo, mid, hi);
+        inversions += sort(nums, aux, lo, mid);
+        inversions += sort(nums, aux, mid + 1, hi);
+        inversions += merge(nums, aux, lo, mid, hi);
         return inversions;
     }
 
-    private long merge(int[] nums, int lo, int mid, int hi) {
+    private long merge(int[] nums, int[] aux, int lo, int mid, int hi) {
         long inversions = 0;
         int i = lo;
         int j = mid + 1;
-        int[] aux = new int[nums.length];
-        for (int k = 0; k < nums.length; k++) {
+         for (int k = lo; k <= hi; k++) {
             aux[k] = nums[k];
         }
         // 统计
         while (i <= mid && j <= hi) {
-            if ((long)aux[i] > 2 * (long)aux[j]) {
+            if ((long) aux[i] > 2 * (long) aux[j]) {
                 inversions += mid - i + 1;
                 j++;
             } else {
