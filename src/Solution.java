@@ -6,9 +6,9 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = new int[]{1, 3, 2, 3, 1};
+        int[] nums = new int[]{3, 2,3,4};
         System.out.println(
-                solution.reversePairs(nums));
+                solution.largestPerimeter(nums));
         System.out.println(Arrays.toString(nums));
     }
 
@@ -430,7 +430,7 @@ public class Solution {
         long inversions = 0;
         int i = lo;
         int j = mid + 1;
-         for (int k = lo; k <= hi; k++) {
+        for (int k = lo; k <= hi; k++) {
             aux[k] = nums[k];
         }
         // 统计
@@ -455,5 +455,35 @@ public class Solution {
                 nums[k] = aux[j++];
         }
         return inversions;
+    }
+
+    /**
+     * 976.三角形的最大周长
+     *
+     * @param A
+     * @return
+     */
+    public int largestPerimeter(int[] A) {
+        if (A.length <= 2) return 0;
+        Arrays.sort(A);
+        int k = A.length - 1;
+        int j = k - 1;
+        int i = j - 1;
+        while (i >= 0) {
+            if (isTriangle(A[i], A[j], A[k])) {
+                return A[i] + A[j] + A[k];
+            }
+            i--;
+            j--;
+            k--;
+        }
+        return 0;
+    }
+
+    private boolean isTriangle(int a, int b, int c) {
+        if (a + b <= c) return false;
+        else if (a + c <= b) return false;
+        else if (b + c <= a) return false;
+        else return true;
     }
 }
