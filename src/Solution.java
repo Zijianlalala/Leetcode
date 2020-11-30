@@ -6,10 +6,9 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = new int[]{3, 2,3,4};
+//        int[] nums = new int[]{3, 2, 3, 4};
         System.out.println(
-                solution.largestPerimeter(nums));
-        System.out.println(Arrays.toString(nums));
+                solution.reorganizeString("aab"));
     }
 
     /**
@@ -485,5 +484,74 @@ public class Solution {
         else if (a + c <= b) return false;
         else if (b + c <= a) return false;
         else return true;
+    }
+
+    /**
+     * 767. 重构字符串
+     *
+     * @param S
+     * @return
+     */
+    public String reorganizeString(String S) {
+        // 哈希表
+        int[] table = new int[26];
+        // 存放结果
+        char[] ret = new char[S.length()];
+        // 统计个数
+        for (int i = 0; i < S.length(); i++) {
+            table[S.charAt(i) - 'a']++;
+        }
+        // 重新构建
+        int i = 0;
+        while (i < S.length()) {
+            // 遍历一遍哈希表
+            for (int j = 0; j < table.length; j++) {
+                if (table[j] > 0 && i > 0 && ret[i - 1] == (char) (j + 'a')) {
+                    if (!insert(ret, (char) (j + 'a'), i - 1)) {
+                        return "";
+                    } else {
+                        i++;
+                        table[j]--;
+                        continue;
+                    }
+                }
+                if (table[j] > 0) {
+                    ret[i++] = (char) (j + 'a');
+                    table[j]--;
+                }
+            } 
+        }
+        return String.valueOf(ret);
+    }
+
+    /**
+     * 将v从后往前遍历插入到不与v'相邻的位置
+     *
+     * @param ret
+     * @param v
+     * @param tail
+     */
+    private boolean insert(char[] ret, char v, int tail) {
+        // 找到插入位置
+        int lo = -1;
+        for (int i = tail - 1; i > 0; i--) {
+            if (ret[i] != v && ret[i - 1] != v) {
+                lo = i;
+            }
+        }
+        // 判断头部满不满足条件
+        if (lo == -1 && ret[0] != v) {
+            lo = 0;
+        }
+        // 没有满足的位置
+        if (lo == -1) {
+            return false;
+        }
+        // 有满足的位置
+        for (int i = tail; i >= lo; i--) {
+            ret[i + 1] = ret[i];
+        }
+        ret[lo] = v;
+        return true;
     }
 }
