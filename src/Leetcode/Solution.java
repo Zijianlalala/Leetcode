@@ -1,4 +1,4 @@
-import com.sun.xml.internal.ws.message.stream.StreamHeader;
+package Leetcode;
 
 import java.util.*;
 
@@ -40,6 +40,14 @@ public class Solution {
         return new int[]{start, end};
     }
 
+    /**
+     * 二分查找
+     * @param nums
+     * @param lo
+     * @param hi
+     * @param target
+     * @return
+     */
     public int binarySort(int[] nums, int lo, int hi, int target) {
         int mid = (lo + hi) / 2;
         while (nums[mid] != target) {
