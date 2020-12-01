@@ -6,9 +6,54 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-//        int[] nums = new int[]{3, 2, 3, 4};
+        int[] nums = new int[]{1};
         System.out.println(
-                solution.reorganizeString("aab"));
+                Arrays.toString(solution.searchRange(nums, 1)));
+    }
+
+    /**
+     * 34.在排序数组中查找元素的第一个和最后一个位置
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int start = -1;
+        int end = -1;
+        if (nums.length > 0) {
+            // 二分查找
+            int mid = binarySort(nums, 0, nums.length-1, target);
+            if (mid != -1) {
+                int i = mid;
+                while(i >= 0 && nums[i] == target) {
+                    i--;
+                }
+                start = i+1;
+                int j = mid;
+                while (j < nums.length && nums[j] == target) {
+                    j++;
+                }
+                end = j-1;
+            }
+        }
+        return new int[]{start, end};
+    }
+
+    public int binarySort(int[] nums, int lo, int hi, int target) {
+        int mid = (lo + hi) / 2;
+        while (nums[mid] != target) {
+            if (lo == hi) {
+                return -1;
+            }
+            if (nums[mid] < target) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+            mid = (lo + hi) / 2;
+        }
+        return mid;
     }
 
     /**
@@ -519,7 +564,7 @@ public class Solution {
                     ret[i++] = (char) (j + 'a');
                     table[j]--;
                 }
-            } 
+            }
         }
         return String.valueOf(ret);
     }
