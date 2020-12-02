@@ -6,10 +6,99 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = new int[]{1};
-        System.out.println(
-                Arrays.toString(solution.searchRange(nums, 1)));
+        int[] nums1 = new int[]{3, 4, 6, 5};
+        int[] nums2 = new int[]{9, 1, 2, 5, 8, 3};
+//        System.out.println(Arrays.toString(solution.maxSubsequence(nums2, 2)));
+        System.out.println(Arrays.toString(solution.maxNumber(nums1, nums2, 5)));
     }
+
+    /**
+     * 拼接最大数
+     *
+     * @param nums1
+     * @param nums2
+     * @param k
+     * @return
+     */
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        int m = nums1.length, n = nums2.length;
+        int[] maxSubsequence = new int[k];
+        int start = Math.max(0, k - n);//??
+        int end = Math.min(k, m);//??
+        for (int i = start; i <= end; i++) {
+            int[] sub1 = maxSubsequence(nums1, i);
+            int[] sub2 = maxSubsequence(nums2, k-i);
+            int[] curMaxSub = merge2(sub1, sub2);
+            if (compare(curMaxSub,0, maxSubsequence, 0) > 0) {
+                System.arraycopy(curMaxSub, 0, maxSubsequence, 0, k);
+            }
+        }
+        return maxSubsequence;
+    }
+
+    /**
+     * 用单调栈来找长度为k的最大子序列
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSubsequence(int[] nums, int k) {
+        int length = nums.length;
+        int[] stack = new int[k];
+        int top = -1;
+        int remain = length - k;// remain表示可以出栈的元素的数量，当remain=0时，再出栈的话，stack就填不满了，故remain=0时，不再出栈了
+        for (int i = 0; i < length; i++) {
+            int num = nums[i];
+            // 找到比num小的，使其出栈
+            while (top >= 0 && stack[top] < num && remain > 0) {
+                top--;
+                remain--;
+            }
+            if (top < k - 1) {
+                stack[++top] = num;
+            } else {
+                remain--;
+            }
+        }
+        return stack;
+    }
+
+    public int[] merge2(int[] nums1, int[] nums2) {
+        int x = nums1.length;
+        int y = nums2.length;
+        if (x == 0) return nums2;
+        if (y == 0) return nums1;
+        int mergeLength = x + y;
+        int[] merged = new int[mergeLength];
+        int index1 = 0, index2 = 0;
+        for (int i = 0; i < mergeLength; i++) {
+            if (compare(nums1, index1, nums2, index2) > 0) {
+//            if (nums1[index1] >= nums2[index2]) {
+                merged[i] = nums1[index1++];
+            } else {
+                merged[i] = nums2[index2++];
+            }
+        }
+        return merged;
+    }
+
+    private int compare(int[] nums1, int index1, int[] nums2, int index2) {
+        int x = nums1.length;
+        int y = nums2.length;
+        while (index1 < x && index2 < y) {
+            int diff = nums1[index1] - nums2[index2];
+            if (diff != 0) {
+                return diff;
+            }
+            index1++;
+            index2++;
+        }
+        // index1或index2越界后
+        // 若index2越界，则-(y-index2) > 0，故return value > 0 太妙了吧草
+        return (x-index1) - (y-index2);
+    }
+
 
     /**
      * 34.在排序数组中查找元素的第一个和最后一个位置
@@ -23,18 +112,18 @@ public class Solution {
         int end = -1;
         if (nums.length > 0) {
             // 二分查找
-            int mid = binarySort(nums, 0, nums.length-1, target);
+            int mid = binarySort(nums, 0, nums.length - 1, target);
             if (mid != -1) {
                 int i = mid;
-                while(i >= 0 && nums[i] == target) {
+                while (i >= 0 && nums[i] == target) {
                     i--;
                 }
-                start = i+1;
+                start = i + 1;
                 int j = mid;
                 while (j < nums.length && nums[j] == target) {
                     j++;
                 }
-                end = j-1;
+                end = j - 1;
             }
         }
         return new int[]{start, end};
@@ -42,6 +131,7 @@ public class Solution {
 
     /**
      * 二分查找
+     *
      * @param nums
      * @param lo
      * @param hi
