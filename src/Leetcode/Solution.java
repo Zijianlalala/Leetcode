@@ -8,7 +8,7 @@ public class Solution {
         Solution solution = new Solution();
         int[] nums1 = new int[]{3, 4, 6, 5};
         int[] nums2 = new int[]{9, 1, 2, 5, 8, 3};
-         System.out.println(solution.countPrimes(0));
+        System.out.println(solution.countPrimes(10));
     }
 
     /**
@@ -18,26 +18,21 @@ public class Solution {
      * @return
      */
     public int countPrimes(int n) {
+        if (n < 3) return 0;
+        // 默认值是false
+        boolean[] signs = new boolean[n];
         int count = 0;
         for (int i = 2; i < n; i++) {
-            if (isPrime(i)){
+            if (!signs[i]) {
                 count++;
+                for (int j = i * i; j < n; j += i) {
+                    signs[j] = true;
+                }
             }
         }
         return count;
     }
 
-    private boolean isPrime(int n) {
-        if (n <= 3) {
-            return n > 1;
-        }
-        for (int i = 2; i < n; i++) {
-            if (n % i == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     /**
      * 321.拼接最大数
