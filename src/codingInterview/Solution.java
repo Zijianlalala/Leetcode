@@ -7,7 +7,36 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         int[] nums = new int[]{0, 1, 2, 3, 4, 11, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        System.out.println(solution.findRepeatNumber(nums));
+        System.out.println(solution.replaceSpace("We are happy."));
+    }
+
+    /**
+     * 5.替换空格
+     *
+     * @param s
+     * @return
+     */
+    public String replaceSpace(String s) {
+        int count = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' ') {
+                count++;
+            }
+        }
+        char[] ret = new char[s.length() + count * 2];
+        int j = s.length()-1;
+        int k = ret.length-1;
+        while (j >= 0 && k >= 0) {
+            if (s.charAt(j) != ' ') {
+                ret[k--] = s.charAt(j);
+            } else{
+                ret[k--] = '0';
+                ret[k--] = '2';
+                ret[k--] = '%';
+            }
+            j--;
+        }
+        return new String(ret);
     }
 
     /**
