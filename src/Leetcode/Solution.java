@@ -8,12 +8,39 @@ public class Solution {
         Solution solution = new Solution();
         int[] nums1 = new int[]{3, 4, 6, 5};
         int[] nums2 = new int[]{9, 1, 2, 5, 8, 3};
-//        System.out.println(Arrays.toString(solution.maxSubsequence(nums2, 2)));
-        System.out.println(Arrays.toString(solution.maxNumber(nums1, nums2, 5)));
+         System.out.println(solution.countPrimes(0));
     }
 
     /**
-     * 拼接最大数
+     * 204.计数质数
+     *
+     * @param n
+     * @return
+     */
+    public int countPrimes(int n) {
+        int count = 0;
+        for (int i = 2; i < n; i++) {
+            if (isPrime(i)){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private boolean isPrime(int n) {
+        if (n <= 3) {
+            return n > 1;
+        }
+        for (int i = 2; i < n; i++) {
+            if (n % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 321.拼接最大数
      *
      * @param nums1
      * @param nums2
@@ -27,9 +54,9 @@ public class Solution {
         int end = Math.min(k, m);//??
         for (int i = start; i <= end; i++) {
             int[] sub1 = maxSubsequence(nums1, i);
-            int[] sub2 = maxSubsequence(nums2, k-i);
+            int[] sub2 = maxSubsequence(nums2, k - i);
             int[] curMaxSub = merge2(sub1, sub2);
-            if (compare(curMaxSub,0, maxSubsequence, 0) > 0) {
+            if (compare(curMaxSub, 0, maxSubsequence, 0) > 0) {
                 System.arraycopy(curMaxSub, 0, maxSubsequence, 0, k);
             }
         }
@@ -96,7 +123,7 @@ public class Solution {
         }
         // index1或index2越界后
         // 若index2越界，则-(y-index2) > 0，故return value > 0 太妙了吧草
-        return (x-index1) - (y-index2);
+        return (x - index1) - (y - index2);
     }
 
 
