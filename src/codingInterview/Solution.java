@@ -11,6 +11,32 @@ public class Solution {
     }
 
     /**
+     * 4.二维数组中的查找
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        boolean result = false;
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int i = 0;
+        int j = cols - 1;
+        while (i < rows && j >= 0) {
+            if (target == matrix[i][j]) {
+                result = true;
+                break;
+            } else if (target > matrix[i][j]) {
+                i++;
+            } else {
+                j--;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 3.数组中重复的数字
      *
      * @param nums
@@ -31,6 +57,7 @@ public class Solution {
         }
         return -1;
     }
+
     private void swap(int[] nums, int i, int j) {
         int t = nums[i];
         nums[i] = nums[j];
