@@ -1,5 +1,8 @@
 package Leetcode;
 
+import DataStructure.ListNode;
+import DataStructure.TreeNode;
+
 import java.util.*;
 
 public class Solution {

@@ -1,4 +1,4 @@
-package Leetcode;
+package DataStructure;
 
 /**
  * 单链表

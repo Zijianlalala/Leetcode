@@ -1,14 +1,39 @@
 package codingInterview;
 
-import java.util.HashMap;
-import java.util.Map;
+import DataStructure.ListNode;
+
+import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = new int[]{0, 1, 2, 3, 4, 11, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
-        System.out.println(solution.replaceSpace("We are happy."));
+        int[] nums = new int[]{1, 2, 3};
+        ListNode head = ListNode.initList(nums);
+        System.out.println(Arrays.toString(solution.reversePrint(head)));
     }
+
+    /**
+     * 6.从尾到头打印链表
+     *
+     * @param head
+     * @return
+     */
+    public int[] reversePrint(ListNode head) {
+        int len = 0;
+        ListNode p = head;
+        while (p != null) {
+            len++;
+            p = p.next;
+        }
+        p = head;
+        int[] ret = new int[len];
+        for (int i = len-1; i >= 0; i--) {
+            ret[i] = p.val;
+            p = p.next;
+        }
+        return ret;
+    }
+
 
     /**
      * 5.替换空格
@@ -24,12 +49,12 @@ public class Solution {
             }
         }
         char[] ret = new char[s.length() + count * 2];
-        int j = s.length()-1;
-        int k = ret.length-1;
+        int j = s.length() - 1;
+        int k = ret.length - 1;
         while (j >= 0 && k >= 0) {
             if (s.charAt(j) != ' ') {
                 ret[k--] = s.charAt(j);
-            } else{
+            } else {
                 ret[k--] = '0';
                 ret[k--] = '2';
                 ret[k--] = '%';
