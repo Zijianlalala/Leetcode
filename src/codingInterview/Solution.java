@@ -1,15 +1,43 @@
 package codingInterview;
 
 import DataStructure.ListNode;
+import DataStructure.TreeNode;
 
 import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums = new int[]{1, 2, 3};
-        ListNode head = ListNode.initList(nums);
-        System.out.println(Arrays.toString(solution.reversePrint(head)));
+        int[] preorder = new int[]{1,2,3};
+        int[] inorder = new int[]{3,2,1};
+        TreeNode root = solution.buildTree(preorder, inorder);
+        TreeNode.preorder(root);
+    }
+
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        return buildTree(preorder, 0, preorder.length - 1, inorder, 0, preorder.length - 1);
+    }
+
+    private TreeNode buildTree(int[] preorder, int lo1, int hi1, int[] inorder, int lo2, int hi2) {
+        if (lo1 == hi1) {
+            TreeNode end = new TreeNode(preorder[lo1]);
+            end.left = null;
+            end.right = null;
+            return end;
+        } else if (lo1 > hi1) {
+            return null;
+        }
+        int pivot = preorder[lo1];
+        int leftLength = 0;
+        for (int i = lo2; i <= hi2; i++) {
+            if (inorder[i] == pivot)
+                break;
+            leftLength++;
+        }
+        TreeNode root = new TreeNode(pivot);
+        root.left = buildTree(preorder, lo1 + 1, lo1 + leftLength, inorder, lo2, lo2 + leftLength-1);
+        root.right = buildTree(preorder, lo1 + leftLength + 1, hi1, inorder, lo2+leftLength+1, hi2);
+        return root;
     }
 
     /**
@@ -27,7 +55,7 @@ public class Solution {
         }
         p = head;
         int[] ret = new int[len];
-        for (int i = len-1; i >= 0; i--) {
+        for (int i = len - 1; i >= 0; i--) {
             ret[i] = p.val;
             p = p.next;
         }
