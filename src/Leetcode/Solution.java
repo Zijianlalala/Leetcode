@@ -12,6 +12,39 @@ public class Solution {
     }
 
     /**
+     * 659.分割数组为连续子序列
+     *
+     * @param nums
+     * @return
+     */
+    public boolean isPossible(int[] nums) {
+        Map<Integer, PriorityQueue<Integer>> map = new HashMap<>();
+        for (int x : nums) {
+            if (!map.containsKey(x)) {
+                map.put(x, new PriorityQueue<Integer>());
+            }
+            if (map.containsKey(x - 1)) {
+                int preLength = map.get(x - 1).poll();
+                if (map.get(x - 1).isEmpty()) {
+                    map.remove(x - 1);
+                }
+                map.get(x).offer(preLength + 1);
+            } else {
+                map.get(x).offer(1);
+            }
+        }
+        Set<Map.Entry<Integer, PriorityQueue<Integer>>> set = map.entrySet();
+        for (Map.Entry<Integer, PriorityQueue<Integer>> entry : set) {
+            PriorityQueue<Integer> queue = entry.getValue();
+            if (queue.peek() < 3) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    /**
      * 204.计数质数
      *
      * @param n
