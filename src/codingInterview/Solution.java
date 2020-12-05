@@ -8,11 +8,7 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] preorder = new int[]{1, 2, 3};
-        int[] inorder = new int[]{3, 2, 1};
-        TreeNode root = solution.buildTree(preorder, inorder);
-        Stack<Integer> stack = new Stack<>();
-        TreeNode.preorder(root);
+        System.out.println(solution.fib(81));
     }
 
     /**
@@ -24,9 +20,14 @@ public class Solution {
     public int fib(int n) {
         if (n == 0) return 0;
         if (n == 1) return 1;
-        return fib(n - 1) + fib(n - 2);
+        int pre1 = 0, pre2 = 1, t = 0;
+        for (int i = 2; i < n + 1; i++) {
+            t =  (pre1 + pre2) % (1000000007);
+            pre1 = pre2;
+            pre2 = t;
+        }
+        return t;
     }
-
 
     /**
      *  用两个栈模拟队列
