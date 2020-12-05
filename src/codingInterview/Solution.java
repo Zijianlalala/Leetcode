@@ -8,12 +8,37 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] preorder = new int[]{1,2,3};
-        int[] inorder = new int[]{3,2,1};
+        int[] preorder = new int[]{1, 2, 3};
+        int[] inorder = new int[]{3, 2, 1};
         TreeNode root = solution.buildTree(preorder, inorder);
+        Stack<Integer> stack = new Stack<>();
         TreeNode.preorder(root);
     }
 
+    /**
+     * 斐波那契数列
+     *
+     * @param n
+     * @return
+     */
+    public int fib(int n) {
+        if (n == 0) return 0;
+        if (n == 1) return 1;
+        return fib(n - 1) + fib(n - 2);
+    }
+
+
+    /**
+     *  用两个栈模拟队列
+     */
+
+    /**
+     * 7.重建二叉树
+     *
+     * @param preorder 前序数组
+     * @param inorder  中序数组
+     * @return
+     */
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         return buildTree(preorder, 0, preorder.length - 1, inorder, 0, preorder.length - 1);
     }
@@ -35,8 +60,8 @@ public class Solution {
             leftLength++;
         }
         TreeNode root = new TreeNode(pivot);
-        root.left = buildTree(preorder, lo1 + 1, lo1 + leftLength, inorder, lo2, lo2 + leftLength-1);
-        root.right = buildTree(preorder, lo1 + leftLength + 1, hi1, inorder, lo2+leftLength+1, hi2);
+        root.left = buildTree(preorder, lo1 + 1, lo1 + leftLength, inorder, lo2, lo2 + leftLength - 1);
+        root.right = buildTree(preorder, lo1 + leftLength + 1, hi1, inorder, lo2 + leftLength + 1, hi2);
         return root;
     }
 
