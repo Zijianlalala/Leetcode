@@ -9,9 +9,72 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] nums1 = new int[]{3, 4, 6, 5};
-        int[] nums2 = new int[]{9, 1, 2, 5, 8, 3};
-        System.out.println(solution.countPrimes(10));
+        char[] tasks = new char[]{'A', 'A', 'A','A', 'A', 'A', 'B','C','D','E','F','G'};
+        System.out.println(solution.leastInterval(tasks, 2));
+    }
+
+    /**
+     * 621.任务调度器
+     *
+     * @param tasks
+     * @param n
+     * @return
+     */
+    public int leastInterval(char[] tasks, int n) {
+        int count = tasks.length;
+        if (n == 0) {
+            return count;
+        }
+        // 记录字符出现的个数
+        int[] nums = new int[26];
+        // 记录字符上一次出现的索引
+        int[] preIndex = new int[26];
+        // 当前指针
+        int index = 0;
+        for (int i = 0; i < tasks.length; i++) {
+            nums[tasks[i] - 'A']++;
+        }
+        for (int i = 0; i < preIndex.length; i++) {
+            preIndex[i] = -1;
+        }
+//        for (int i = 0; i < nums.length; i++) {
+//            if (nums[i] > 0 ) {
+//                preIndex[i] = index;
+//                index++;
+//                System.out.println((char) (i + 'A'));
+//                count--;
+//                nums[i]--;
+//                break;
+//             }
+//        }
+        while (count > 0) {
+            // 判断index可不可以插入值
+            boolean isValid = false;
+            int i = 0;
+            int maxLeft = 0;
+            int maxLeftIndex = 0;
+            for (; i < nums.length; i++) {
+                if ((nums[i] > 0 && preIndex[i] == -1) ||// 第一次插入该字符
+                        nums[i] > 0 && (index - preIndex[i]) > n) {// 前n处没有重复的字符
+                    isValid = true;
+                    if (nums[i] > maxLeft) {
+                        maxLeft = nums[i];
+                        maxLeftIndex = i;
+                    }
+                }
+            }
+             if (isValid) {
+                preIndex[maxLeftIndex] = index;
+                System.out.println((char) (maxLeftIndex + 'A'));
+                index++;
+                count--;
+                nums[maxLeftIndex]--;
+            }else{
+                index++;// 待命
+                System.out.println("null");
+            }
+        }
+        return index;
     }
 
     /**
