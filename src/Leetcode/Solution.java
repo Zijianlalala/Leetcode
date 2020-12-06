@@ -9,8 +9,46 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        char[] tasks = new char[]{'A', 'A', 'A','A', 'A', 'A', 'B','C','D','E','F','G'};
-        System.out.println(solution.leastInterval(tasks, 2));
+        System.out.println(solution.generate(5));
+    }
+
+    /**
+     * 118.杨辉三角
+     *
+     * @param numRows
+     * @return
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> ret = new ArrayList<>();
+        if (numRows == 0) return ret;
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        ret.add(list);
+        if (numRows == 1) return ret;
+        list = new ArrayList<>();
+        list.add(1);
+        list.add(1);
+        ret.add(list);
+        if (numRows == 2) return ret;
+        int[] up = new int[]{1,1};
+        int[] bottom;
+        for (int i = 3; i < numRows + 1; i++) {
+            bottom = new int[i];
+            for (int j = 0; j < i; j++) {
+                if (j == 0 || j == i-1) {
+                    bottom[j] = 1;
+                } else {
+                     bottom[j] = up[j-1]+up[j];
+                }
+            }
+            list = new ArrayList<>();
+            for (int j = 0; j < bottom.length; j++) {
+                list.add(bottom[j]);
+            }
+            ret.add(list);
+            up = bottom;
+        }
+        return ret;
     }
 
     /**
@@ -23,22 +61,22 @@ public class Solution {
     public int leastInterval(char[] tasks, int n) {
         int count = tasks.length;
         int[] nums = new int[26];
-        for(int i = 0; i < tasks.length; i++) {
-            nums[tasks[i]-'A']++;
+        for (int i = 0; i < tasks.length; i++) {
+            nums[tasks[i] - 'A']++;
         }
         int N = 0;
-        for(int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < nums.length; i++) {
             if (nums[i] > N) {
                 N = nums[i];
             }
         }
         int x = 0;
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] == N) {
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == N) {
                 x++;
             }
         }
-        return Math.max(count, (N-1)*(n+1)+x);
+        return Math.max(count, (N - 1) * (n + 1) + x);
     }
 
     /**
