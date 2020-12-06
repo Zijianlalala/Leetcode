@@ -8,7 +8,67 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.fib(81));
+//        int[] nums = new int[]{3, 4, 5, 1, 2};
+        char[][] board = new char[][]{
+                {'A'}, {'B'}
+        };
+        System.out.println(solution.exist(board, "BA"));
+    }
+
+    /**
+     * 12.矩阵中的路径
+     *
+     * @param board 矩阵
+     * @param word  路径
+     * @return 返回是否存在
+     */
+    public boolean exist(char[][] board, String word) {
+        int[] memo = new int[board.length * board[0].length];
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == word.charAt(0)) {
+                    if (exist(board, memo, i, j, word, 0))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean exist(char[][] board, int[] memo, int i, int j, String word, int index) {
+        if (i < 0 || i >= board.length) return false;
+        if (j < 0 || j >= board[0].length) return false;
+        if (memo[i * board[0].length + j] > 0) return false;
+        boolean ret = false;
+        if (index < word.length() && board[i][j] == word.charAt(index) && index == word.length() - 1) {
+            ret = true;
+        } else if (index < word.length() && board[i][j] == word.charAt(index)) {
+            memo[i * board[0].length + j]++;
+            ret = exist(board, memo, i + 1, j, word, index + 1) ||
+                    exist(board, memo, i - 1, j, word, index + 1) ||
+                    exist(board, memo, i, j + 1, word, index + 1) ||
+                    exist(board, memo, i, j - 1, word, index + 1);
+            if (!ret) {
+                memo[i * board[0].length + j]--;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * 旋转数组的最小数字
+     *
+     * @param numbers
+     * @return
+     */
+    public int minArray(int[] numbers) {
+        if (numbers.length == 0) return -1;
+        for (int i = numbers.length - 1; i > 0; i--) {
+            if (numbers[i] < numbers[i - 1]) {
+                return numbers[i];
+            }
+        }
+        return numbers[0];
     }
 
     /**
@@ -22,7 +82,7 @@ public class Solution {
         if (n == 1) return 1;
         int pre1 = 0, pre2 = 1, t = 0;
         for (int i = 2; i < n + 1; i++) {
-            t =  (pre1 + pre2) % (1000000007);
+            t = (pre1 + pre2) % (1000000007);
             pre1 = pre2;
             pre2 = t;
         }

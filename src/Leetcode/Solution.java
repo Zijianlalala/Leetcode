@@ -20,33 +20,16 @@ public class Solution {
      */
     public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> ret = new ArrayList<>();
-        if (numRows == 0) return ret;
-        List<Integer> list = new ArrayList<>();
-        list.add(1);
-        ret.add(list);
-        if (numRows == 1) return ret;
-        list = new ArrayList<>();
-        list.add(1);
-        list.add(1);
-        ret.add(list);
-        if (numRows == 2) return ret;
-        int[] up = new int[]{1,1};
-        int[] bottom;
-        for (int i = 3; i < numRows + 1; i++) {
-            bottom = new int[i];
-            for (int j = 0; j < i; j++) {
-                if (j == 0 || j == i-1) {
-                    bottom[j] = 1;
+        for (int i = 0; i < numRows ; i++) {
+            List<Integer> list = new ArrayList<>();
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || j == i) {
+                    list.add(1);
                 } else {
-                     bottom[j] = up[j-1]+up[j];
+                    list.add(ret.get(i - 1).get(j - 1) + ret.get(i - 1).get(j));
                 }
             }
-            list = new ArrayList<>();
-            for (int j = 0; j < bottom.length; j++) {
-                list.add(bottom[j]);
-            }
             ret.add(list);
-            up = bottom;
         }
         return ret;
     }
