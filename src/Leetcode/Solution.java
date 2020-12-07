@@ -2,6 +2,7 @@ package Leetcode;
 
 import DataStructure.ListNode;
 import DataStructure.TreeNode;
+import sun.plugin.cache.OldCacheEntry;
 
 import java.util.*;
 
@@ -9,8 +10,44 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.generate(5));
+//        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
+        int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
+//        System.out.println("[1,0]=" + solution.score(new int[]{1, 0}));
+        System.out.println(solution.matrixScore(A));
+
     }
+
+    /**
+     * 861.翻转矩阵后的得分
+     *
+     * @param
+     * @return
+     */
+    public int matrixScore(int[][] A) {
+        int ret = 0;
+        int rows = A.length;
+        int cols = A[0].length;
+        // 调整行向量
+        for (int i = 0; i < rows; i++) {
+            // 可以直接判断首位是不是0
+            if (A[i][0] == 0) {
+                for (int j = 0; j < cols;j++){
+                    A[i][j] ^= 1;//异或
+                }
+            }
+        }
+        // 调整列向量
+        for (int i = 0; i < cols; i++) {
+            // 统计一列中"1"的个数
+            int count = 0;
+            for (int j = 0; j < rows; j++) {
+                count += A[j][i];
+            }
+            ret += Math.max(count, rows - count) * (1 << (cols - i - 1));
+        }
+        return ret;
+    }
+
 
     /**
      * 118.杨辉三角
@@ -20,7 +57,7 @@ public class Solution {
      */
     public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> ret = new ArrayList<>();
-        for (int i = 0; i < numRows ; i++) {
+        for (int i = 0; i < numRows; i++) {
             List<Integer> list = new ArrayList<>();
             for (int j = 0; j <= i; j++) {
                 if (j == 0 || j == i) {

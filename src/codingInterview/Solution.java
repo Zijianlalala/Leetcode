@@ -8,11 +8,89 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-//        int[] nums = new int[]{3, 4, 5, 1, 2};
-        char[][] board = new char[][]{
-                {'A'}, {'B'}
-        };
-        System.out.println(solution.exist(board, "BA"));
+        System.out.println(solution.cuttingRope(10));
+    }
+
+    /**
+     * 14.I.剪绳子
+     *
+     * @param n
+     * @return
+     */
+    public int cuttingRope(int n) {
+        if (n < 2) return 0;
+        if (n == 2) return 1;
+        if (n == 3) return 2;
+        int[] ret = new int[n + 1];
+        ret[1] = 1;
+        ret[2] = 2;
+        ret[3] = 3;
+        // 填充数组
+        for (int i = 4; i <= n; i++) {
+            int max = 0;
+            for (int j = 1; j <= i / 2; j++) {
+                int curr = ret[j] * ret[i - j];
+                if (curr > max) {
+                    max = curr;
+                }
+            }
+            ret[i] = max;
+        }
+        return ret[n];
+    }
+
+
+    /**
+     * 剑指 Offer 13. 机器人的运动范围
+     *
+     * @param m rows
+     * @param n cols
+     * @param k
+     * @return count
+     */
+    public int movingCount(int m, int n, int k) {
+        int count = 0;
+        int[] memo = new int[m * n];
+        count = movingCount(0, 0, m, n, memo, k);
+        return count;
+    }
+
+    private int movingCount(int i, int j, int m, int n, int[] memo, int k) {
+        int count = 0;
+        if (check(i, j, m, n, memo, k)) {
+            memo[i * n + j]++;
+            count = 1 +
+                    movingCount(i, j - 1, m, n, memo, k) +
+                    movingCount(i, j + 1, m, n, memo, k) +
+                    movingCount(i - 1, j, m, n, memo, k) +
+                    movingCount(i + 1, j, m, n, memo, k);
+        }
+        return count;
+    }
+
+    private boolean check(int i, int j, int m, int n, int[] memo, int k) {
+        if (i >= 0 && i < m && j >= 0 && j < n
+                && split(i) + split(j) <= k
+                && memo[i * n + j] == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 将整数按位相加
+     *
+     * @param n
+     * @return
+     */
+    public int split(int n) {
+        int sum = 0;
+        while (n > 0) {
+            sum += n % 10;
+
+            n /= 10;
+        }
+        return sum;
     }
 
     /**
