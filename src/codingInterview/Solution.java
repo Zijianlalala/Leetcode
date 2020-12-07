@@ -8,7 +8,22 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.cuttingRope(10));
+        System.out.println(solution.hammingWeight(-3));
+     }
+
+    /**
+     * 15. 二进制中1的个数
+     *
+     * @param n
+     * @return
+     */
+    public int hammingWeight(int n) {
+        int cnt = 0;
+        while (n!= 0) {
+            n &= (n-1);
+            cnt++;
+        }
+        return cnt;
     }
 
     /**
