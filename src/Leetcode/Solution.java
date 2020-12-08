@@ -12,9 +12,50 @@ public class Solution {
         Solution solution = new Solution();
 //        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
         int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
-//        System.out.println("[1,0]=" + solution.score(new int[]{1, 0}));
-        System.out.println(solution.matrixScore(A));
 
+
+    }
+
+    /**
+     * 842. 将数组拆分成斐波那契序列
+     */
+    public List<Integer> splitIntoFibonacci(String S) {
+        List<Integer> list = new ArrayList<Integer>();
+        backtrack(list, S, S.length(), 0, 0, 0);
+        return list;
+    }
+
+    public boolean backtrack(List<Integer> list, String S, int length, int index, int sum, int prev) {
+        if (index == length) {
+            return list.size() >= 3;
+        }
+        long currLong = 0;
+        for (int i = index; i < length; i++) {
+            if (i > index && S.charAt(index) == '0') {
+                break;
+            }
+            // 想到了这样组合成一个整型
+            currLong = currLong * 10 + S.charAt(i) - '0';
+            if (currLong > Integer.MAX_VALUE) {
+                break;
+            }
+            int curr = (int) currLong;
+            if (list.size() >= 2) {
+                if (curr < sum) {
+                    continue;
+                } else if (curr > sum) {
+                    break;
+                }
+            }
+            list.add(curr);
+            // 没有想到递归失败，怎么回溯的方法，每次backtrack就是一次切分
+            if (backtrack(list, S, length, i + 1, prev + curr, curr)) {
+                return true;
+            } else {
+                list.remove(list.size() - 1);
+            }
+        }
+        return false;
     }
 
     /**
