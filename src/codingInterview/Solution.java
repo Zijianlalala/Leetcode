@@ -8,8 +8,35 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.hammingWeight(-3));
-     }
+        System.out.println(solution.myPow(2, -2147483648));
+    }
+
+    /**
+     * 16.快速幂
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow(double x, int n) {
+        boolean positive = true;
+        long longN = n;
+        if (longN < 0) {
+            longN = -longN;
+            positive = false;
+        }
+        return positive ? myPowUnsigned(x, longN) : 1.0 / myPowUnsigned(x, longN);
+    }
+
+    public double myPowUnsigned(double x, long n) {
+        if (n == 0) return 1;
+        if (n == 1) return x;
+        double ret = myPowUnsigned(x, n >> 1);
+        ret *= ret;
+        if ((n & 0x1) == 1) {
+            ret *= x;
+        }
+        return ret;
+    }
 
     /**
      * 15. 二进制中1的个数
@@ -19,8 +46,8 @@ public class Solution {
      */
     public int hammingWeight(int n) {
         int cnt = 0;
-        while (n!= 0) {
-            n &= (n-1);
+        while (n != 0) {
+            n &= (n - 1);
             cnt++;
         }
         return cnt;
