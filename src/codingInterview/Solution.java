@@ -8,11 +8,51 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(solution.myPow(2, -2147483648));
+        System.out.println(Arrays.toString(solution.printNumbers(3)));
+    }
+
+    /**
+     * 18.删除链表的节点
+     *
+     * @param head
+     * @param val
+     * @return
+     */
+    public ListNode deleteNode(ListNode head, int val) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode p = dummyHead.next;
+        ListNode pre = dummyHead;
+        while (p != null && p.val != val) {
+            pre = p;
+            p = p.next;
+        }
+        pre.next = p.next;
+        return dummyHead.next;
+    }
+
+    /**
+     * 剑指 Offer 17. 打印从1到最大的n位数
+     *
+     * @param n
+     * @return
+     */
+    public int[] printNumbers(int n) {
+        int max = 9;
+        while (n > 1) {
+            max = max * 10 + 9;
+            n--;
+        }
+        int[] ret = new int[max];
+        for (int i = 0; i < max; i++) {
+            ret[i] = i + 1;
+        }
+        return ret;
     }
 
     /**
      * 16.快速幂
+     *
      * @param x
      * @param n
      * @return
