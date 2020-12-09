@@ -12,8 +12,34 @@ public class Solution {
         Solution solution = new Solution();
 //        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
         int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
+        System.out.println(solution.uniquePaths(3, 2));
 
+    }
 
+    /**
+     * 62.不同路径
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public int uniquePaths(int m, int n) {
+        if (m <= 0 || n <= 0) return 0;
+        if (n < 2 || m < 2) return 1;
+
+        int[][] aux = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            aux[i][n - 1] = 1;
+        }
+        for (int j = 0; j < n; j++) {
+            aux[m - 1][j] = 1;
+        }
+        for (int j = n - 2; j >= 0; j--) {
+            for (int i = m - 2; i >= 0; i--) {
+                aux[i][j] = aux[i][j + 1] + aux[i + 1][j];
+            }
+        }
+        return aux[0][0];
     }
 
     /**
@@ -72,7 +98,7 @@ public class Solution {
         for (int i = 0; i < rows; i++) {
             // 可以直接判断首位是不是0
             if (A[i][0] == 0) {
-                for (int j = 0; j < cols;j++){
+                for (int j = 0; j < cols; j++) {
                     A[i][j] ^= 1;//异或
                 }
             }
