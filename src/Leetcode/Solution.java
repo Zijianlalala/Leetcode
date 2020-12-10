@@ -17,6 +17,38 @@ public class Solution {
     }
 
     /**
+     * 860. 柠檬水找零
+     *
+     * @param bills
+     * @return
+     */
+    public boolean lemonadeChange(int[] bills) {
+        int[] wallet = new int[3];//5/10/20
+        for (int i = 0; i < bills.length; i++) {
+            int change = bills[i] - 5;
+            if (change == 5) { // 需要找零
+                if (wallet[0] > 0) {
+                    wallet[0]--;
+                } else {
+                    return false;
+                }
+            } else if (change == 15) {
+                if (wallet[0] > 0 && wallet[1] > 0) {
+                    wallet[0]--;
+                    wallet[1]--;
+                } else if(wallet[0] > 2){
+                    wallet[0] -= 3;
+                }else {
+                    return false;
+                }
+            }
+            if (bills[i] != 20)
+                wallet[bills[i] / 5 - 1]++;
+        }
+        return true;
+    }
+
+    /**
      * 62.不同路径
      *
      * @param m
