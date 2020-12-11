@@ -23,64 +23,27 @@ public class Solution {
      * @return
      */
     public String predictPartyVictory(String senate) {
-        ListNode<Character> head = new ListNode('0');// 空的头结点
-        ListNode<Character> p = head;
-        for (int i = 0; i < senate.length(); i++) {
-            ListNode<Character> q = new ListNode<>(senate.charAt(i));
-            p.next = q;
-            p = q;
+        int n = senate.length();
+        Queue<Integer> radiant = new LinkedList<>();
+        Queue<Integer> dire = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (senate.charAt(i) == 'R') {
+                radiant.offer(i);
+            } else {
+                dire.offer(i);
+            }
         }
-        p.next = null;
-        while (head.next.next != null) { // 每一轮
-//            System.out.print("--new round--");
-//            ListNode.print(head);
-            // 检测
-            p = head.next;
-            boolean isSame = true;
-            while (p.next != null) {
-                if (p.val != p.next.val) {
-                    isSame = false;
-                }
-                p = p.next;
+        while (!radiant.isEmpty() && !dire.isEmpty()) {
+            int radiantIndex = radiant.poll(), direIndex = dire.poll();
+            if (radiantIndex < direIndex) {
+                radiant.offer(radiantIndex + n);
+            } else {
+                dire.offer(direIndex + n);
             }
-            if (isSame) {
-                break;
-            }
-            p = head.next;
-            while (p != null) {
-//                ListNode.print(head);
-                 if (p.val == 'D') {
-                    if (!deleteNode(p, 'R')) {
-                        deleteNode(head, 'R');
-                    }
-                } else {
-                    if (!deleteNode(p, 'D')){
-                        deleteNode(head, 'D');
-                    }
-                }
-                p = p.next;
-
-            }
-
-         }
-        return (char)head.next.val == 'D' ? "Dire" : "Radiant";
+        }
+        return radiant.isEmpty() ? "Dire" : "Radiant";
     }
 
-    private boolean deleteNode(ListNode<Character> head, Character val) {
-        ListNode<Character> pre = head;
-        ListNode<Character> p = head;
-        boolean ret = false;
-        while (p != null) {
-            if (p.val == val) {
-                pre.next = p.next;
-                ret = true;
-                break;
-            }
-            pre = p;
-            p = p.next;
-        }
-        return ret;
-    }
 
     /**
      * 860. 柠檬水找零
