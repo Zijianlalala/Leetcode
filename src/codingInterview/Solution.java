@@ -4,12 +4,25 @@ import DataStructure.ListNode;
 import DataStructure.TreeNode;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 //        System.out.println(Arrays.toString(solution.printNumbers(3)));
-        System.out.println(solution.isMatch("ab",".*c"));
+        System.out.println(solution.isNumber("2e9"));
+    }
+
+    public boolean isNumber(String s) {
+        s = s.trim();
+        if (s.equals("")) return false;
+        String pattern = "(\\+|\\-){0,1}" +
+                "((\\d+(\\.\\d*){0,1})|(\\d*\\.\\d+))" +
+                "((e|E)(\\-|\\+){0,1}\\d+){0,1}";
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(s);
+        return m.matches();
     }
 
     /**
@@ -21,24 +34,24 @@ public class Solution {
      */
     public boolean isMatch(String s, String p) {
         if (s == null || p == null) return false;
-        return isMatch(s,0,p,0);
+        return isMatch(s, 0, p, 0);
     }
 
     private boolean isMatch(String s, int i, String p, int j) {
-        if (i == s.length()  && j == p.length() )
+        if (i == s.length() && j == p.length())
             return true;
-        if (i != s.length()  && j == p.length() )
+        if (i != s.length() && j == p.length())
             return false;
-        if (j < p.length()-1 && p.charAt(j + 1) == '*') {
-            if (p.charAt(j) == s.charAt(i) || p.charAt(j) == '.' && i != s.length() ) {
+        if (j < p.length() - 1 && p.charAt(j + 1) == '*') {
+            if (p.charAt(j) == s.charAt(i) || p.charAt(j) == '.' && i != s.length()) {
                 return isMatch(s, i + 1, p, j + 2)
                         || isMatch(s, i + 1, p, j)
                         || isMatch(s, i, p, j + 2);
             } else {
-                return isMatch(s, i , p, j + 2);
+                return isMatch(s, i, p, j + 2);
             }
         }
-        if (s.charAt(i) == p.charAt(j) || (p.charAt(j) == '.' && i != s.length() )) {
+        if (s.charAt(i) == p.charAt(j) || (p.charAt(j) == '.' && i != s.length())) {
             return isMatch(s, i + 1, p, j + 1);
         }
         return false;
