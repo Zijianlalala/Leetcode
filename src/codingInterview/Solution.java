@@ -11,18 +11,67 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 //        System.out.println(Arrays.toString(solution.printNumbers(3)));
-        System.out.println(solution.isNumber("2e9"));
+        int[] nums = new int[]{2,4,6};
+        System.out.println(Arrays.toString(solution.exchange(nums)));
     }
 
+    /**
+     * 21
+     */
+    public int[] exchange(int[] nums) {
+        if(nums.length == 0 || nums == null) return nums;
+        int i = 0;
+        int j = nums.length - 1;
+        while (true) {
+            while (i < nums.length && (nums[i] & 0x1) == 1)
+                i++;
+            while (j >= 0 &&  (nums[j] & 0x1) != 1)
+                j--;
+            if (i >= j) break;
+            int t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
+        }
+        return nums;
+    }
+
+    /**
+     * 20
+     */
+    int i = 0;
+
     public boolean isNumber(String s) {
+        if (s == null) return false;
         s = s.trim();
         if (s.equals("")) return false;
-        String pattern = "(\\+|\\-){0,1}" +
-                "((\\d+(\\.\\d*){0,1})|(\\d*\\.\\d+))" +
-                "((e|E)(\\-|\\+){0,1}\\d+){0,1}";
-        Pattern r = Pattern.compile(pattern);
-        Matcher m = r.matcher(s);
-        return m.matches();
+        boolean numeric = scanInteger(s);
+        if (i < s.length() && s.charAt(i) == '.') {
+            i++;
+            // 判断小数部分
+            numeric = scanUnsignedInteger(s) || numeric;
+        }
+        if (i == s.length() - 1 && (s.charAt(i) == 'e' || s.charAt(i) == 'E')) {//如果最后一个字符是e|E时
+            numeric = numeric && false;
+        } else if (i < s.length() && (s.charAt(i) == 'e' || s.charAt(i) == 'E')) {
+            i++;
+            numeric = numeric && scanInteger(s);
+        }
+        return numeric && i == s.length();
+    }
+
+    public boolean scanInteger(String s) {
+        if (s.charAt(i) == '+' || s.charAt(i) == '-') {
+            i++;
+        }
+        return scanUnsignedInteger(s);
+    }
+
+    public boolean scanUnsignedInteger(String s) {
+        int before = i;
+        while (i < s.length() && s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+            i++;
+        }
+        return i > before;
     }
 
     /**
