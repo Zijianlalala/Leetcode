@@ -3,15 +3,15 @@ package DataStructure;
 /**
  * 单链表
  */
-public class ListNode {
-    public int val;
+public class ListNode<T> {
+    public T val;
     public ListNode next;
 
-    public ListNode(int x) {
+    public ListNode(T x) {
         val = x;
     }
 
-    public ListNode(int val, ListNode next) {
+    public ListNode(T val, ListNode next) {
         this.val = val;
         this.next = next;
     }
@@ -40,4 +40,6 @@ public class ListNode {
         q.next = null;
         return head;
     }
+
+
 }

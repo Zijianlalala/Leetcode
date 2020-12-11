@@ -8,17 +8,39 @@ import java.util.*;
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
-        System.out.println(Arrays.toString(solution.printNumbers(3)));
+//        System.out.println(Arrays.toString(solution.printNumbers(3)));
+        System.out.println(solution.isMatch("ab",".*c"));
     }
 
     /**
      * 19.正则表达式匹配
+     *
      * @param s
      * @param p
      * @return
      */
     public boolean isMatch(String s, String p) {
+        if (s == null || p == null) return false;
+        return isMatch(s,0,p,0);
+    }
 
+    private boolean isMatch(String s, int i, String p, int j) {
+        if (i == s.length()  && j == p.length() )
+            return true;
+        if (i != s.length()  && j == p.length() )
+            return false;
+        if (j < p.length()-1 && p.charAt(j + 1) == '*') {
+            if (p.charAt(j) == s.charAt(i) || p.charAt(j) == '.' && i != s.length() ) {
+                return isMatch(s, i + 1, p, j + 2)
+                        || isMatch(s, i + 1, p, j)
+                        || isMatch(s, i, p, j + 2);
+            } else {
+                return isMatch(s, i , p, j + 2);
+            }
+        }
+        if (s.charAt(i) == p.charAt(j) || (p.charAt(j) == '.' && i != s.length() )) {
+            return isMatch(s, i + 1, p, j + 1);
+        }
         return false;
     }
 
@@ -29,11 +51,11 @@ public class Solution {
      * @param val
      * @return
      */
-    public ListNode deleteNode(ListNode head, int val) {
-        ListNode dummyHead = new ListNode(0);
+    public ListNode<Integer> deleteNode(ListNode<Integer> head, int val) {
+        ListNode<Integer> dummyHead = new ListNode(0);
         dummyHead.next = head;
-        ListNode p = dummyHead.next;
-        ListNode pre = dummyHead;
+        ListNode<Integer> p = dummyHead.next;
+        ListNode<Integer> pre = dummyHead;
         while (p != null && p.val != val) {
             pre = p;
             p = p.next;
@@ -303,9 +325,9 @@ public class Solution {
      * @param head
      * @return
      */
-    public int[] reversePrint(ListNode head) {
+    public int[] reversePrint(ListNode<Integer> head) {
         int len = 0;
-        ListNode p = head;
+        ListNode<Integer> p = head;
         while (p != null) {
             len++;
             p = p.next;

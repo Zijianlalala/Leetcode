@@ -12,8 +12,74 @@ public class Solution {
         Solution solution = new Solution();
 //        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
         int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
-        System.out.println(solution.uniquePaths(3, 2));
+        System.out.println(solution.predictPartyVictory("DRRDRDRDRDDRDRDR"));
 
+    }
+
+    /**
+     * 649. Dota2 参议院
+     *
+     * @param senate
+     * @return
+     */
+    public String predictPartyVictory(String senate) {
+        ListNode<Character> head = new ListNode('0');// 空的头结点
+        ListNode<Character> p = head;
+        for (int i = 0; i < senate.length(); i++) {
+            ListNode<Character> q = new ListNode<>(senate.charAt(i));
+            p.next = q;
+            p = q;
+        }
+        p.next = null;
+        while (head.next.next != null) { // 每一轮
+//            System.out.print("--new round--");
+//            ListNode.print(head);
+            // 检测
+            p = head.next;
+            boolean isSame = true;
+            while (p.next != null) {
+                if (p.val != p.next.val) {
+                    isSame = false;
+                }
+                p = p.next;
+            }
+            if (isSame) {
+                break;
+            }
+            p = head.next;
+            while (p != null) {
+//                ListNode.print(head);
+                 if (p.val == 'D') {
+                    if (!deleteNode(p, 'R')) {
+                        deleteNode(head, 'R');
+                    }
+                } else {
+                    if (!deleteNode(p, 'D')){
+                        deleteNode(head, 'D');
+                    }
+                }
+                p = p.next;
+
+            }
+
+         }
+        return (char)head.next.val == 'D' ? "Dire" : "Radiant";
+    }
+
+    private boolean deleteNode(ListNode<Character> head, Character val) {
+        ListNode<Character> pre = head;
+        ListNode<Character> p = head;
+        boolean ret = false;
+        while (p != null) {
+            if (p.val == val) {
+                pre.next = p.next;
+                ret = true;
+                break;
+            }
+            pre = p;
+            p = p.next;
+        }
+        return ret;
     }
 
     /**
@@ -36,9 +102,9 @@ public class Solution {
                 if (wallet[0] > 0 && wallet[1] > 0) {
                     wallet[0]--;
                     wallet[1]--;
-                } else if(wallet[0] > 2){
+                } else if (wallet[0] > 2) {
                     wallet[0] -= 3;
-                }else {
+                } else {
                     return false;
                 }
             }
@@ -419,10 +485,10 @@ public class Solution {
      * @param head
      * @return
      */
-    public ListNode InsertionSortList(ListNode head) {
+    public ListNode<Integer> InsertionSortList(ListNode<Integer> head) {
         if (head == null) return null;
-        ListNode q, qPre = null;
-        ListNode pPre = head, p = pPre.next;
+        ListNode<Integer> q, qPre = null;
+        ListNode<Integer> pPre = head, p = pPre.next;
         while (pPre.next != null) {
             // 如果当前节点比前序节点大，则略过本次排序
             if (p.val >= pPre.val) {
@@ -467,19 +533,19 @@ public class Solution {
      * @param head
      * @return
      */
-    public ListNode sortList(ListNode head) {
+    public ListNode<Integer> sortList(ListNode<Integer> head) {
         if (head == null || head.next == null) {
             return head;
         }
         // create a null head
-        ListNode nullHead = new ListNode(0, head);
-        ListNode sorted = new ListNode(0, null);
-        ListNode cur, pre;
+        ListNode<Integer> nullHead = new ListNode(0, head);
+        ListNode<Integer> sorted = new ListNode(0, null);
+        ListNode<Integer> cur, pre;
         while (nullHead.next != null) {
             pre = nullHead;
             cur = pre.next;
             int maxVal = cur.val;
-            ListNode max = cur, preMax = pre;
+            ListNode<Integer> max = cur, preMax = pre;
             while (cur != null) {
                 if (cur.val > maxVal) {
                     maxVal = cur.val;
@@ -524,9 +590,9 @@ public class Solution {
         return sorted;
     }
 
-    private ListNode merge(ListNode head1, ListNode head2) {
-        ListNode dummyHead = new ListNode(0);
-        ListNode temp = dummyHead, temp1 = head1, temp2 = head2;
+    private ListNode<Integer> merge(ListNode<Integer> head1, ListNode<Integer> head2) {
+        ListNode<Integer> dummyHead = new ListNode(0);
+        ListNode<Integer> temp = dummyHead, temp1 = head1, temp2 = head2;
 
         while (temp1 != null && temp2 != null) {
             if (temp1.val < temp2.val) {
