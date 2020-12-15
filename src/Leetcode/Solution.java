@@ -4,6 +4,7 @@ import DataStructure.ListNode;
 import DataStructure.TreeNode;
 import sun.plugin.cache.OldCacheEntry;
 
+import java.net.Inet4Address;
 import java.util.*;
 
 public class Solution {
@@ -12,8 +13,37 @@ public class Solution {
         Solution solution = new Solution();
 //        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
         int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
-        System.out.println(solution.predictPartyVictory("DRRDRDRDRDDRDRDR"));
+        System.out.println(solution.monotoneIncreasingDigits(1432));
+    }
 
+    /**
+     * 单调递增的数字
+     *
+     * @param N
+     * @return
+     */
+    public int monotoneIncreasingDigits(int N) {
+        String s = String.valueOf(N);
+        char[] ret = new char[s.length()];
+        ret[0] = s.charAt(0);
+        int i = 1;
+        for (; i < s.length(); i++) {
+            if (s.charAt(i) < s.charAt(i - 1)) {
+                ret[--i]--;
+                break;
+            }
+            ret[i] = s.charAt(i);
+        }
+        if (i < s.length()) {
+            while (i > 0 && ret[i - 1] > ret[i]) {
+                ret[--i]--;
+            }
+            // 填充后面的值
+            for (int j = i + 1; j < s.length(); j++) {
+                ret[j] = '9';
+            }
+        }
+        return Integer.parseInt(new String(ret));
     }
 
     /**
