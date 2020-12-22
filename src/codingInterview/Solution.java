@@ -11,8 +11,37 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 //        System.out.println(Arrays.toString(solution.printNumbers(3)));
-        int[] nums = new int[]{2,4,6};
-        System.out.println(Arrays.toString(solution.exchange(nums)));
+        int[] pushed = new int[]{1,2,3,4,5};
+        int[] popped = new int[]{5,4,3,1,2};
+        System.out.println(solution.validateStackSequences(pushed, popped));
+    }
+
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        int usedIndex = 0;
+        boolean isFound = false;
+        Stack<Integer> stack = new Stack<>();
+        for(int i = 0; i < popped.length; i++) {
+            int j = usedIndex;
+            for(; j < pushed.length; j++) {
+                if (pushed[j] == popped[i]) {
+                    isFound = true;
+                    break;
+                }
+            }
+            if (isFound) {
+                while(usedIndex < pushed.length &&  usedIndex <= j) {
+                    stack.push(pushed[usedIndex++]);
+                }
+                isFound =false;
+            }
+            // 说明j已经入栈了，判断栈顶元素
+            if (stack.peek() != popped[i]) {
+                return false;
+            } else {
+                stack.pop();
+            }
+        }
+        return true;
     }
 
     /**

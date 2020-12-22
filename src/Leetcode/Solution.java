@@ -42,6 +42,7 @@ public class Solution {
             for (int j = i + 1; j < s.length(); j++) {
                 ret[j] = '9';
             }
+
         }
         return Integer.parseInt(new String(ret));
     }
