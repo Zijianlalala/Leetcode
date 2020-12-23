@@ -13,8 +13,27 @@ public class Solution {
         Solution solution = new Solution();
 //        int[][] A = new int[][]{{0, 0, 1, 1}, {1, 0, 1, 0}, {1, 1, 0, 0}};
         int[][] A = new int[][]{{0, 1}, {0, 1}, {0, 1}, {0, 0}};
-        System.out.println(solution.monotoneIncreasingDigits(1432));
+        System.out.println(solution.firstUniqChar("loveleetcode"));
     }
+
+    public int firstUniqChar(String s) {
+        int[] counts = new int[26];
+        int[] indexes = new int[26];
+        int firstIndex = -1;
+        for (int i = 0; i < s.length(); i++) {
+            counts[s.charAt(i) - 'a']++;
+            indexes[s.charAt(i)-'a'] = i;
+        }
+        for (int i = 0; i < counts.length; i++) {
+            if (counts[i] == 1 && firstIndex == -1) {
+                firstIndex = indexes[i];
+            } else if (counts[i] == 1 && firstIndex != -1 && firstIndex > indexes[i]) {
+                firstIndex = indexes[i];
+            }
+        }
+        return firstIndex;
+    }
+
 
     /**
      * 单调递增的数字
