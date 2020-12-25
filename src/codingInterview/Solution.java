@@ -16,6 +16,9 @@ public class Solution {
         System.out.println(solution.validateStackSequences(pushed, popped));
     }
 
+
+
+
     public boolean validateStackSequences(int[] pushed, int[] popped) {
         int usedIndex = 0;
         boolean isFound = false;
