@@ -17,6 +17,9 @@ public class Solution {
         StringBuilder sb = new StringBuilder("");
 
         String a = "a,a,a";
+        a.toCharArray();
+        Set<String> set = new HashSet<String>();
+
     }
 
 
