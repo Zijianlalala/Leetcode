@@ -14,7 +14,11 @@ public class Solution {
         int[] pushed = new int[]{1,2,3,4,5};
         int[] popped = new int[]{5,4,3,1,2};
         System.out.println(solution.validateStackSequences(pushed, popped));
+        StringBuilder sb = new StringBuilder("");
+
+        String a = "a,a,a";
     }
+
 
 
 
