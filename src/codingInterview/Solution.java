@@ -30,7 +30,7 @@ public class Solution {
                 ret[i][j] = grid[i][j] + (left>up?left:up);
             }
         }
-        return ret[rows-1][cols-1];
+         return ret[rows-1][cols-1];
     }
 
     public int translateNum(int num) {
