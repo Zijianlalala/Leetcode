@@ -10,14 +10,53 @@ public class Solution {
         Solution solution = new Solution();
 //        System.out.println(Arrays.toString(solution.printNumbers(3)));
         int[] pushed = new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4};
-        int[] popped = new int[]{41,23,87,55,50,53,18,9,39,63,35,33,54,25,26,49,74,61,32,81,97,99,38,96,22,95,35,57,80,80,16,22,17,13,89,11,75,98,57,81,69,8,10,85,13,49,66,94,80,25,13,85,55,12,87,50,28,96,80,43,10,24,88,52,16,92,61,28,26,78,28
-                ,28,16,1,56,31,47,85,27,30,85,2,30,51,84,50,3,14,97,9,91,90,63,90,92,89,76,76,67,55};
+        int[] popped = new int[]{41, 23, 87, 55, 50, 53, 18, 9, 39, 63, 35, 33, 54, 25, 26, 49, 74, 61, 32, 81, 97, 99, 38, 96, 22, 95, 35, 57, 80, 80, 16, 22, 17, 13, 89, 11, 75, 98, 57, 81, 69, 8, 10, 85, 13, 49, 66, 94, 80, 25, 13, 85, 55, 12, 87, 50, 28, 96, 80, 43, 10, 24, 88, 52, 16, 92, 61, 28, 26, 78, 28
+                , 28, 16, 1, 56, 31, 47, 85, 27, 30, 85, 2, 30, 51, 84, 50, 3, 14, 97, 9, 91, 90, 63, 90, 92, 89, 76, 76, 67, 55};
 //        solution.preProcess(popped, 0, popped.length - 1);
-        System.out.println(solution.minNumber(popped));
+        System.out.println(solution.translateNum(12258));
     }
 
+    public int maxValue(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int[][] ret = new int[rows][cols];
+        for(int i = 0; i < rows; i++) {
+            for(int j = 0; j < cols; j++) {
+                int up = 0, left = 0;
+                if (j > 0)
+                    left = ret[i][j-1];
+                if (i > 0)
+                    up = ret[i-1][j];
+                ret[i][j] = grid[i][j] + (left>up?left:up);
+            }
+        }
+        return ret[rows-1][cols-1];
+    }
+
+    public int translateNum(int num) {
+        if (num < 10) {
+            return 1;
+        } else if (num < 26) {
+            return 2;
+        } else if (num < 100) {
+            return 1;
+        }
+        int temp = num;
+        // 取下最高位
+        int count = 0;
+        while (temp > 100) {
+            temp /= 10;
+            ++count;
+        }
+        int n1 = temp / 10; // 十位
+        int nums1 = num - temp * (int) Math.pow(10, count);
+        int nums2 = num - n1 * (int) Math.pow(10, count + 1);
+        return translateNum(nums1) + translateNum(nums2);
+    }
+
+
     public String minNumber(int[] nums) {
-        preProcess(nums, 0, nums.length-1);
+        preProcess(nums, 0, nums.length - 1);
         System.out.println(Arrays.toString(nums));
         backtrack(nums, 0);
         return min;
