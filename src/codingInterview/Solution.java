@@ -4,45 +4,179 @@ import DataStructure.ListNode;
 import DataStructure.TreeNode;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 //        System.out.println(Arrays.toString(solution.printNumbers(3)));
-        int[] pushed = new int[]{1,2,3,4,5};
-        int[] popped = new int[]{5,4,3,1,2};
-        System.out.println(solution.validateStackSequences(pushed, popped));
-        StringBuilder sb = new StringBuilder("");
+        int[] pushed = new int[]{-2, 1, -3, 4, -1, 2, 1, -5, 4};
+        int[] popped = new int[]{41,23,87,55,50,53,18,9,39,63,35,33,54,25,26,49,74,61,32,81,97,99,38,96,22,95,35,57,80,80,16,22,17,13,89,11,75,98,57,81,69,8,10,85,13,49,66,94,80,25,13,85,55,12,87,50,28,96,80,43,10,24,88,52,16,92,61,28,26,78,28
+                ,28,16,1,56,31,47,85,27,30,85,2,30,51,84,50,3,14,97,9,91,90,63,90,92,89,76,76,67,55};
+//        solution.preProcess(popped, 0, popped.length - 1);
+        System.out.println(solution.minNumber(popped));
+    }
 
-        String a = "a,a,a";
-        a.toCharArray();
-        Set<String> set = new HashSet<String>();
+    public String minNumber(int[] nums) {
+        preProcess(nums, 0, nums.length-1);
+        System.out.println(Arrays.toString(nums));
+        backtrack(nums, 0);
+        return min;
+    }
 
+    String min = null;
+
+    private void backtrack(int[] nums, int start) {
+        if (start == nums.length - 1) {
+            // 判断大小
+            StringBuffer sb = new StringBuffer("");
+            for (int j = 0; j < nums.length; j++) {
+                sb.append(nums[j]);
+            }
+            if (min == null) {
+                min = sb.toString();
+            } else if (cmp(sb.toString(), min)) {
+                // 比较大小
+                min = sb.toString();
+            }
+            System.out.println(min);
+            return;
+        }
+        for (int i = start; i < nums.length; i++) {
+            int t = nums[start];
+            nums[start] = nums[i];
+            nums[i] = t;
+            StringBuffer sb = null;
+            if (min == null) {
+                backtrack(nums, start + 1);
+            } else {
+                sb = new StringBuffer("");
+                for (int j = 0; j < nums.length; j++) {
+                    sb.append(nums[j]);
+                }
+                if (cmp(sb.toString(), min)) {
+                    backtrack(nums, start + 1);
+                }
+            }
+            t = nums[start];
+            nums[start] = nums[i];
+            nums[i] = t;
+        }
+    }
+
+    /**
+     * s2>s1时返回true
+     * s2<=s1时返回false
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    private boolean cmp(String s1, String s2) {
+        char[] c1 = s1.toCharArray();
+        char[] c2 = s2.toCharArray();
+        int lo1 = 0, lo2 = 0;
+        while (lo1 < c1.length && c1[lo1] == '0')
+            lo1++;
+        while (lo2 < c2.length && c2[lo2] == '0')
+            lo2++;
+        int length1 = c1.length - lo1;
+        int length2 = c2.length - lo2;
+        if (length1 > length2) {
+            return false;
+        } else if (length1 < length2) {
+            return true;
+        } else {
+            while (lo1 < c1.length && lo2 < c2.length && c1[lo1] == c2[lo2]) {
+                lo1++;
+                lo2++;
+            }
+            if (lo1 == c1.length) {
+                lo1--;
+                lo2--;
+            }
+            return c1[lo1] < c2[lo2];
+        }
+    }
+
+    /**
+     * 预处理，按照最高位排序
+     *
+     * @param nums
+     */
+    public void preProcess(int[] nums, int lo, int hi) {
+        if (lo >= hi) return;
+        int mid = partition(nums, lo, hi);
+        preProcess(nums, lo, mid - 1);
+        preProcess(nums, mid + 1, hi);
+    }
+
+    private int partition(int[] nums, int lo, int hi) {
+        int i = lo;
+        int j = hi + 1;
+        int p = nums[lo];
+        while (true) {
+            while (i < hi && less(nums[++i], p)) ;
+            while (lo < j && less(p, nums[--j])) ;
+            if (i >= j) {
+                break;
+            }
+            int t = nums[i];
+            nums[i] = nums[j];
+            nums[j] = t;
+        }
+        int t = nums[lo];
+        nums[lo] = nums[j];
+        nums[j] = t;
+        return j;
+    }
+
+    private boolean less(int a, int b) {
+        while (a > 10)
+            a /= 10;
+        while (b > 10)
+            b /= 10;
+        return a < b;
     }
 
 
-
+    public int maxSubArray(int[] nums) {
+        int max = nums[0];
+        int preMax = max;
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] > 0 && max > 0) {
+                max += nums[i];
+            } else if (nums[i] > 0 && max <= 0) {
+                preMax = max;
+                max = nums[i];
+            } else if (max > preMax) {
+                preMax = max;
+                System.out.println(preMax);
+                max = nums[i];
+            }
+        }
+        if (max > preMax)
+            preMax = max;
+        return preMax;
+    }
 
 
     public boolean validateStackSequences(int[] pushed, int[] popped) {
         int usedIndex = 0;
         boolean isFound = false;
         Stack<Integer> stack = new Stack<>();
-        for(int i = 0; i < popped.length; i++) {
+        for (int i = 0; i < popped.length; i++) {
             int j = usedIndex;
-            for(; j < pushed.length; j++) {
+            for (; j < pushed.length; j++) {
                 if (pushed[j] == popped[i]) {
                     isFound = true;
                     break;
                 }
             }
             if (isFound) {
-                while(usedIndex < pushed.length &&  usedIndex <= j) {
+                while (usedIndex < pushed.length && usedIndex <= j) {
                     stack.push(pushed[usedIndex++]);
                 }
-                isFound =false;
+                isFound = false;
             }
             // 说明j已经入栈了，判断栈顶元素
             if (stack.peek() != popped[i]) {
@@ -58,13 +192,13 @@ public class Solution {
      * 21
      */
     public int[] exchange(int[] nums) {
-        if(nums.length == 0 || nums == null) return nums;
+        if (nums.length == 0 || nums == null) return nums;
         int i = 0;
         int j = nums.length - 1;
         while (true) {
             while (i < nums.length && (nums[i] & 0x1) == 1)
                 i++;
-            while (j >= 0 &&  (nums[j] & 0x1) != 1)
+            while (j >= 0 && (nums[j] & 0x1) != 1)
                 j--;
             if (i >= j) break;
             int t = nums[i];
