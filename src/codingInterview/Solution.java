@@ -16,6 +16,46 @@ public class Solution {
         System.out.println(solution.translateNum(12258));
     }
 
+    /**
+     * 统计逆序数
+     * @param nums
+     * @return
+     */
+    public int reversePairs(int[] nums) {
+        sort(nums, 0, nums.length-1);
+        System.out.println(Arrays.toString(nums));
+        return (int)ret;
+    }
+    long ret = 0;
+    private void sort(int[] nums, int lo, int hi){
+        if (lo >= hi) return ;
+        int mid = (hi-lo)/2 + lo;
+        sort(nums, lo, mid);
+        sort(nums, mid+1, hi);
+        ret += merge(nums, lo, mid, hi);
+    }
+
+    private long merge(int[] nums, int lo, int mid, int hi) {
+        long inversions = 0;
+        int i = lo;
+        int j = mid + 1;
+        int[] aux = new int[nums.length];
+        // 这里太耗时了，不需要填充整个数组，只要把lo..hi给填充即可
+        for(int p = 0; p < aux.length; p++)
+            aux[p]= nums[p];
+        for(int k = lo; k <= hi; k++) {
+            if (i > mid) nums[k] = aux[j++];
+            else if (j > hi) nums[k] = aux[i++];
+            else if (aux[i] > aux[j]){
+                inversions += mid - i + 1;
+                nums[k] = aux[j++];
+            } else {
+                nums[k] = aux[i++];
+            }
+        }
+        return inversions;
+    }
+
     public int maxValue(int[][] grid) {
         int rows = grid.length;
         int cols = grid[0].length;
