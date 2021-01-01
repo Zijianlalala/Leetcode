@@ -36,6 +36,7 @@ public class Solution {
     }
 
     private long merge(int[] nums, int lo, int mid, int hi) {
+
         long inversions = 0;
         int i = lo;
         int j = mid + 1;
