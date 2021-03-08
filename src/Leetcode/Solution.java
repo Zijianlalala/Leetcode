@@ -14,10 +14,67 @@ public class Solution {
 
         //[[10,8],[10,8],[1,2],[10,3],[1,3],[6,3],[5,2]]
         int[][] heights = new int[][]{{10, 8}, {10, 8}, {1, 2}, {10, 3}, {1, 3}, {6, 3}, {5, 2}};
-        System.out.println(solution.minimumEffortPath(heights));
-
+//        System.out.println(solution.isValid("){"));
+        List<String> list = new ArrayList<>();
+        solution.backtrack(list, new StringBuilder(),3,3);
+        System.out.println(list.toString());
+    }
+    public void backtrack(List<String>ans, StringBuilder s, int left, int right){
+        if (left == 0 && right == 0) {
+            ans.add(s.toString());
+            return;
+        }
+        if (left > 0) {
+            s.append('(');
+            if (validate(s)) {
+                backtrack(ans, s, --left, right);
+                left++;
+            }
+            s.deleteCharAt(s.length()-1);
+        }
+        if (right > 0) {
+            s.append(')');
+            if (validate(s)){
+                backtrack(ans, s, left, --right);
+                ++right;
+            }
+            s.deleteCharAt(s.length()-1);
+        }
     }
 
+    boolean validate(StringBuilder s) {
+        int left = 0;
+        int right = 0;
+        for(int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ')')
+                right++;
+            else
+                left++;
+        }
+        return left >= right;
+    }
+    public boolean isValid(String s) {
+        Deque<Character> stack = new LinkedList<>();
+        char[] ch = s.toCharArray();
+        for(int i = 0; i < ch.length; i++) {
+            char c = ch[i];
+            if (c == '(' || c == '{' || c == '[')
+                stack.push(c);
+            else {
+                Character top = stack.peek();
+                if (c==')' && (top == null || top != '('))
+                    return false;
+                else if (c == ']' && (top == null || top != '['))
+                    return false;
+                else if (c == '}' && (top == null || top != '{'))
+                    return false;
+                stack.pop();
+            }
+
+        }
+
+        return stack.size() == 0;
+    }
     int ret = Integer.MAX_VALUE;
 
     public int minimumEffortPath(int[][] heights) {
@@ -61,6 +118,7 @@ public class Solution {
             //marked[i][j-1] = 0;
         }
         marked[i][j] = 0;
+
     }
 
     private class UnionFind {
