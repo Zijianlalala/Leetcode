@@ -15,9 +15,25 @@ public class Solution {
         //[[10,8],[10,8],[1,2],[10,3],[1,3],[6,3],[5,2]]
         int[][] heights = new int[][]{{10, 8}, {10, 8}, {1, 2}, {10, 3}, {1, 3}, {6, 3}, {5, 2}};
 //        System.out.println(solution.isValid("){"));
-        List<String> list = new ArrayList<>();
-        solution.backtrack(list, new StringBuilder(),3,3);
-        System.out.println(list.toString());
+//        List<String> list = new ArrayList<>();
+//        solution.backtrack(list, new StringBuilder(),3,3);
+        System.out.println(solution.subsets(new int[] {1,2,3}));
+    }
+
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        f(nums, 0, new ArrayList<>(), res);
+        return res;
+    }
+    private void f(int[] nums, int idx, List<Integer> list, List<List<Integer>> res) {
+        if(idx <= nums.length) {
+            res.add(new ArrayList<>(list));
+        }
+        for(int i = idx; i < nums.length; i++) {
+            list.add(nums[i]);
+            f(nums, i + 1, list, res);
+            list.remove(list.size()-1);
+        }
     }
     public void backtrack(List<String>ans, StringBuilder s, int left, int right){
         if (left == 0 && right == 0) {
