@@ -22,7 +22,7 @@ public class Solution {
     public void backtrack(List<String>ans, StringBuilder s, int left, int right){
         if (left == 0 && right == 0) {
             ans.add(s.toString());
-            return;
+             return;
         }
         if (left > 0) {
             s.append('(');
