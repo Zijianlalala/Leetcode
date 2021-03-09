@@ -2,6 +2,9 @@
 
 > Where there's a will, there is a way. 🐛！
 
+## 分类
+[按标签分类](doc/category.md)
+
 ## 2020年
 
 [11月打卡记录](doc/202011.md)
