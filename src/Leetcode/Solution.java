@@ -17,9 +17,28 @@ public class Solution {
 //        System.out.println(solution.isValid("){"));
 //        List<String> list = new ArrayList<>();
 //        solution.backtrack(list, new StringBuilder(),3,3);
-        System.out.println(solution.subsets(new int[] {1,2,3}));
+        System.out.println(solution.removeDuplicates("aababaab"));
     }
+    public String removeDuplicates(String S) {
+        char[] ch = S.toCharArray();
+        int i = 0;
+        int count = 0;
+        while(i < ch.length-count-1 && count < ch.length){
+            if (ch[i] == ch[i+1]) {
+                for(int j = i+2; j < ch.length-count; j++) {
+                    ch[j-2] = ch[j];
+                }
 
+                count += 2 ;
+                i = 0;
+                System.out.println(new String(ch) + ", " + new String(ch, 0, ch.length-count) + ", count = " + count );
+            } else {
+                i++;
+            }
+        }
+        System.out.println(count);
+        return new String(ch, 0, ch.length-count);
+    }
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         f(nums, 0, new ArrayList<>(), res);
@@ -33,6 +52,7 @@ public class Solution {
             list.add(nums[i]);
             f(nums, i + 1, list, res);
             list.remove(list.size()-1);
+            new String();
         }
     }
     public void backtrack(List<String>ans, StringBuilder s, int left, int right){
