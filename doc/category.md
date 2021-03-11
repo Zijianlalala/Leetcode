@@ -7,6 +7,7 @@
 `Deque<> stack = new LinkedList<>();//push,pop,peek`
 * 1047.删除字符串中的所有相邻重复项
 * 224.基本计算器
+* 155.最小栈
 
 ### 队列
 `Queue<> queue = new LinkedList<>()//offer,poll`
@@ -22,6 +23,7 @@
 ### 链表
 * 19.删除链表倒数第K个结点
 * 141.环形链表
+* 160.相交链表
 
 ## 搜索
 * 33.搜索旋转排序数组
