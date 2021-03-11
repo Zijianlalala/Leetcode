@@ -12,53 +12,140 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 
-        //[[10,8],[10,8],[1,2],[10,3],[1,3],[6,3],[5,2]]
-        int[][] heights = new int[][]{{10, 8}, {10, 8}, {1, 2}, {10, 3}, {1, 3}, {6, 3}, {5, 2}};
-//        System.out.println(solution.isValid("){"));
-//        List<String> list = new ArrayList<>();
-//        solution.backtrack(list, new StringBuilder(),3,3);
-        System.out.println(solution.removeDuplicates("aababaab"));
+        String s = "1+1-1";
+        System.out.println(solution.calculate(s));
+     }
+    public int calculate(String s) {
+        s = s.replaceAll(" ", "");
+        Deque<Integer> operand = new LinkedList<>();
+        Deque<Character> operator = new LinkedList<>();
+        StringBuilder numString = new StringBuilder();
+        char[] ch = s.toCharArray();
+        int idx = 0;
+        while(idx < ch.length) {
+            char c = ch[idx];
+            if (c >= '0' && c <='9') {
+                numString = new StringBuilder();
+                numString.append(c);
+                int j = 1;
+                 while(idx + j < ch.length && ch[idx+j] >= '0' && ch[idx+j] <='9') {
+                     numString.append(ch[idx+j]);
+                     j++;
+                 }
+                idx += j;
+                int num = Integer.valueOf(numString.toString());
+                if (operator.peek() == null) {//操作数栈为空
+                    operand.push(num);
+                } else {// 操作数栈不为空
+                    char op = operator.pop();
+                    if (op == '*') {
+                        int num2 = operand.pop();
+                        int ans = num2 * num;
+                        operand.push(ans);
+                    } else if (op == '/') {
+                        int num2 = operand.pop();
+                        int ans = num2 / num;
+                        operand.push(ans);
+                    } else { // 把弹出来的+/-号再入栈//不进行操作
+                        operator.push(op);
+                        operand.push(num);
+                    }
+                }
+            } else { // 操作符直接入栈
+                operator.push(c);
+                idx++;
+            }
+        }
+        while(operator.size() > 0 ) {
+            char op = operator.removeLast();
+            if (op == '+') {
+                int num1 = operand.removeLast();
+                int num2 = operand.removeLast();
+                int ans = num1 + num2;
+                operand.addLast(ans);
+            } else {
+                int num1 = operand.removeLast();
+                int num2 = operand.removeLast();
+                int ans = num1 - num2;
+                operand.addLast(ans);
+            }
+        }
+        return operand.peek();
     }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        int minLength = Integer.MAX_VALUE;
+        int maxLength = Integer.MIN_VALUE;
+        for (String part : wordDict) {
+            if (part.length() < minLength)
+                minLength = part.length();
+            if (part.length() > maxLength)
+                maxLength = part.length();
+        }
+        return wordBreak(s, 0, minLength, maxLength, wordDict);
+    }
+
+    boolean wordBreak(String s, int idx, int min, int max, List<String> wordDict) {
+        if (idx == s.length()) {
+            return true;
+        }
+        if (idx > s.length())
+            return false;
+        boolean result = false;
+        for (int i = min; i < max + 1; i++) {
+            if (result) break;
+            if (idx + i > s.length()) break;
+            String split = s.substring(idx, idx + i);
+            if (wordDict.indexOf(split) != -1) {
+                result = wordBreak(s, idx + i, min, max, wordDict);
+            }
+
+        }
+        return result;
+    }
+
     public String removeDuplicates(String S) {
         char[] ch = S.toCharArray();
         int i = 0;
         int count = 0;
-        while(i < ch.length-count-1 && count < ch.length){
-            if (ch[i] == ch[i+1]) {
-                for(int j = i+2; j < ch.length-count; j++) {
-                    ch[j-2] = ch[j];
+        while (i < ch.length - count - 1 && count < ch.length) {
+            if (ch[i] == ch[i + 1]) {
+                for (int j = i + 2; j < ch.length - count; j++) {
+                    ch[j - 2] = ch[j];
                 }
 
-                count += 2 ;
+                count += 2;
                 i = 0;
-                System.out.println(new String(ch) + ", " + new String(ch, 0, ch.length-count) + ", count = " + count );
+                System.out.println(new String(ch) + ", " + new String(ch, 0, ch.length - count) + ", count = " + count);
             } else {
                 i++;
             }
         }
         System.out.println(count);
-        return new String(ch, 0, ch.length-count);
+        return new String(ch, 0, ch.length - count);
     }
+
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         f(nums, 0, new ArrayList<>(), res);
         return res;
     }
+
     private void f(int[] nums, int idx, List<Integer> list, List<List<Integer>> res) {
-        if(idx <= nums.length) {
+        if (idx <= nums.length) {
             res.add(new ArrayList<>(list));
         }
-        for(int i = idx; i < nums.length; i++) {
+        for (int i = idx; i < nums.length; i++) {
             list.add(nums[i]);
             f(nums, i + 1, list, res);
-            list.remove(list.size()-1);
+            list.remove(list.size() - 1);
             new String();
         }
     }
-    public void backtrack(List<String>ans, StringBuilder s, int left, int right){
+
+    public void backtrack(List<String> ans, StringBuilder s, int left, int right) {
         if (left == 0 && right == 0) {
             ans.add(s.toString());
-             return;
+            return;
         }
         if (left > 0) {
             s.append('(');
@@ -66,22 +153,22 @@ public class Solution {
                 backtrack(ans, s, --left, right);
                 left++;
             }
-            s.deleteCharAt(s.length()-1);
+            s.deleteCharAt(s.length() - 1);
         }
         if (right > 0) {
             s.append(')');
-            if (validate(s)){
+            if (validate(s)) {
                 backtrack(ans, s, left, --right);
                 ++right;
             }
-            s.deleteCharAt(s.length()-1);
+            s.deleteCharAt(s.length() - 1);
         }
     }
 
     boolean validate(StringBuilder s) {
         int left = 0;
         int right = 0;
-        for(int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == ')')
                 right++;
             else
@@ -89,16 +176,17 @@ public class Solution {
         }
         return left >= right;
     }
+
     public boolean isValid(String s) {
         Deque<Character> stack = new LinkedList<>();
         char[] ch = s.toCharArray();
-        for(int i = 0; i < ch.length; i++) {
+        for (int i = 0; i < ch.length; i++) {
             char c = ch[i];
             if (c == '(' || c == '{' || c == '[')
                 stack.push(c);
             else {
                 Character top = stack.peek();
-                if (c==')' && (top == null || top != '('))
+                if (c == ')' && (top == null || top != '('))
                     return false;
                 else if (c == ']' && (top == null || top != '['))
                     return false;
@@ -111,6 +199,7 @@ public class Solution {
 
         return stack.size() == 0;
     }
+
     int ret = Integer.MAX_VALUE;
 
     public int minimumEffortPath(int[][] heights) {
