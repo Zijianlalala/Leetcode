@@ -12,9 +12,34 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
 
-        String s = "1+1-1";
-        System.out.println(solution.calculate(s));
+        String s = "9,#";
+
+        System.out.println(solution.isValidSerialization(s));
      }
+    public boolean isValidSerialization(String s) {
+        String[] split = s.split(",");
+        if (split.length % 2 == 0)
+            return false;
+        boolean ans = isValid2(split) ;
+        System.out.println(ans);
+        boolean ans2 = idx == split.length-1;
+        System.out.println(idx + "," + ans2);
+        return ans && ans2;
+    }
+    int idx = 0;
+    boolean isValid2(String[] s) {
+        if (idx < s.length && "#".equals(s[idx]))
+            return true;
+        if (idx >= s.length)
+            return false;
+        // 如果是数字
+        idx++;
+        boolean left = isValid2(s);
+        idx++;
+        boolean right = isValid2(s);
+        return left && right;
+    }
+
     public int calculate(String s) {
         s = s.replaceAll(" ", "");
         Deque<Integer> operand = new LinkedList<>();
