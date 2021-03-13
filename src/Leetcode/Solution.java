@@ -20,6 +20,8 @@ public class Solution {
         return findKthLargest(nums, nums.length-k, 0, nums.length-1);
     }
     int findKthLargest(int[] nums, int k, int lo, int hi) {
+        int  r =  new Random().nextInt(hi - lo + 1) + lo;
+        swap(nums, lo, r);
         int pivot = nums[lo];
         int i = lo, j = hi+1;
         while(true) {
