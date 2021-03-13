@@ -11,11 +11,36 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-
+        int[] a = new int[]{ 2,3,1,2,4,3};
         String s = "9,#";
 
-        System.out.println(solution.isValidSerialization(s));
+        System.out.println(solution.minSubArrayLen(7, a));
      }
+    public int minSubArrayLen(int target, int[] nums) {
+        int sum = nums[0];
+        int minLength = nums.length;
+        int lo =  0, hi = 0;
+        for(; hi < nums.length ;) {
+            if ( sum < target) {
+                ++hi;
+                if (hi == nums.length)
+                    break;
+                sum += nums[hi];
+                continue;
+            }
+            minLength = Math.min(minLength, hi-lo+1);
+            // 移动左指针
+            while(true) {
+                sum -= nums[lo++];
+                if (sum >= target) {
+                    minLength = Math.min(minLength, hi-lo+1);
+                } else {
+                    break;
+                }
+            }
+        }
+        return minLength;
+    }
     public boolean isValidSerialization(String s) {
         String[] split = s.split(",");
         if (split.length % 2 == 0)
