@@ -24,6 +24,8 @@ public class Solution {
         System.out.println(ans);
         boolean ans2 = idx == split.length-1;
         System.out.println(idx + "," + ans2);
+        Set<String> set = new HashSet<>();
+
         return ans && ans2;
     }
     int idx = 0;
