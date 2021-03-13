@@ -11,11 +11,37 @@ public class Solution {
 
     public static void main(String[] args) {
         Solution solution = new Solution();
-        int[] a = new int[]{ 2,3,1,2,4,3};
+        int[] a = new int[]{ 3,2,1,5,6,4};
         String s = "9,#";
 
-        System.out.println(solution.minSubArrayLen(7, a));
+        System.out.println(solution.findKthLargest(a, 2));
      }
+    public int findKthLargest(int[] nums, int k) {
+        return findKthLargest(nums, nums.length-k, 0, nums.length-1);
+    }
+    int findKthLargest(int[] nums, int k, int lo, int hi) {
+        int pivot = nums[lo];
+        int i = lo, j = hi+1;
+        while(true) {
+            while(i < hi && nums[++i] < pivot);
+            while(j > lo && nums[--j] > pivot);
+            if (i >= j) break;
+            swap(nums, i, j);
+        }
+        swap(nums, lo, j);
+        if (j == k)
+            return nums[k];
+        else if (k < j) {// 在左边
+            return findKthLargest(nums, k, lo, j-1);
+        } else {
+            return findKthLargest(nums, k, j+1, hi);
+        }
+    }
+    void swap(int[] a, int i, int j) {
+        int t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
     public int minSubArrayLen(int target, int[] nums) {
         int sum = nums[0];
         int minLength = nums.length;
@@ -26,6 +52,7 @@ public class Solution {
                 if (hi == nums.length)
                     break;
                 sum += nums[hi];
+
                 continue;
             }
             minLength = Math.min(minLength, hi-lo+1);
