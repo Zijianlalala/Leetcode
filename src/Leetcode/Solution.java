@@ -12,10 +12,48 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         int[] a = new int[]{ 3,2,1,5,6,4};
-        String s = "9,#";
-
-        System.out.println(solution.findKthLargest(a, 2));
+        String s ="2[abc]xyc3[z]";
+        System.out.println(solution.decodeString(s));
      }
+    public String decodeString(String s) {
+        char[] ch = s.toCharArray();
+        StringBuilder ans = new StringBuilder();
+        while(idx < s.length()) {
+            ans.append(bracketString(ch));
+        }
+        return ans.toString();
+    }
+    int idx = 0;
+    String bracketString(char[] ch) {
+        StringBuilder s = new StringBuilder();
+        int repeat = 1;
+        // 重复数字大于1
+        StringBuilder num = new StringBuilder();
+        while (ch[idx] >= '0' && ch[idx] <= '9') {
+            num.append(ch[idx++]);
+        }
+        if (!num.toString().equals("")) {
+            repeat = Integer.valueOf(num.toString());
+        }
+        while(idx < ch.length && ch[idx] != ']') {//遇到右括号终止
+            while (idx < ch.length && ch[idx] > '0' && ch[idx] <= '9') {//在括号中遇到数字
+                s.append(bracketString(ch));
+            }
+            if (idx < ch.length && ch[idx] == '[') {//遇到左括号
+                idx++;
+                continue;
+            }
+            if (idx < ch.length && ch[idx] != ']')
+                s.append(ch[idx++]);
+        }
+        idx++;
+      //  System.out.println(s.toString());
+        StringBuilder ans = new StringBuilder();
+        for(int i = 0; i < repeat; i++)
+            ans.append(s.toString());
+        return ans.toString();
+    }
+
     public int findKthLargest(int[] nums, int k) {
         return findKthLargest(nums, nums.length-k, 0, nums.length-1);
     }
@@ -82,7 +120,6 @@ public class Solution {
 
         return ans && ans2;
     }
-    int idx = 0;
     boolean isValid2(String[] s) {
         if (idx < s.length && "#".equals(s[idx]))
             return true;
