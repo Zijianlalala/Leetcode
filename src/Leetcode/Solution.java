@@ -12,9 +12,27 @@ public class Solution {
     public static void main(String[] args) {
         Solution solution = new Solution();
         int[] a = new int[]{ 3,2,1,5,6,4};
-        String s ="2[abc]xyc3[z]";
-        System.out.println(solution.decodeString(s));
+        String p = "yqrbgjdwtcaxzsnifvhmou";
+         //System.out.println(solution.findAnagrams(s, p));
      }
+
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> ans = new ArrayList<>();
+        String s2 = sort(p);
+        for(int i = 0; i <= s.length() - p.length(); i++) {
+            String curr = s.substring(i, i + p.length());
+            String s1 = sort(curr);
+            if (s1.equals(p))
+                ans.add(i);
+        }
+        return ans;
+    }
+
+    String sort(String s) {
+        char[] ch = s.toCharArray();
+        Arrays.sort(ch);
+        return new String(ch);
+    }
     public String decodeString(String s) {
         char[] ch = s.toCharArray();
         StringBuilder ans = new StringBuilder();
