@@ -43,6 +43,7 @@ public class Solution {
                 idx++;
                 continue;
             }
+
             if (idx < ch.length && ch[idx] != ']')
                 s.append(ch[idx++]);
         }
